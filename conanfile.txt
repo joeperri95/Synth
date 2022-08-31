@@ -1,6 +1,7 @@
 [requires]
 sdl/2.0.18
 imgui/1.88
+implot/0.13
 
 [generators]
 cmake
