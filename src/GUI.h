@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <SDL_opengles.h>
 #include "implot.h"
+#include "../external/imnodes/imnodes.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
@@ -13,6 +14,10 @@
 #include "EffectController.h"
 #include "AudioQueue.h"
 #include "AudioBuffer.h"
+#include "ui/ControlWidget.h"
+#include "ui/VolumeWidget.h"
+#include "ui/VolumeNodeWidget.h"
+#include "ui/NodeEditorWidget.h"
 
 struct sdl_deleter
 {
@@ -29,7 +34,7 @@ public:
     GUI();
     ~GUI();
 
-    void initialize(std::shared_ptr<EffectController> controller, audio::AudioQueue<sample_type> *queue);
+    void initialize(std::shared_ptr<EffectController> controller, audio::AudioQueue<sample_type> *queue, std::shared_ptr<ui::VolumeWidget> v);
     void shut_down();
     void handle_event();
     void render();
@@ -44,6 +49,8 @@ private:
     int width;
     std::shared_ptr<EffectController> controller;
     audio::AudioQueue<sample_type> *queue;
+    std::shared_ptr<ui::VolumeWidget> v;
+    NodeEditorWidget nodes;
 };
     
 }

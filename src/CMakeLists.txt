@@ -11,6 +11,13 @@ set(Sources
     ../bindings/imgui_impl_sdl.cpp
     ../bindings/imgui_impl_sdlrenderer.h
     ../bindings/imgui_impl_sdlrenderer.cpp
+    ../external/imnodes/imnodes.h
+    ../external/imnodes/imnodes.cpp
+    ../external/imnodes/imnodes_internal.h
+    effects/Volume.cpp
+    ui/VolumeWidget.cpp
+    ui/NodeEditorWidget.cpp
+    ui/VolumeNodeWidget.cpp
 )
 
 set(Headers
@@ -19,6 +26,7 @@ set(Headers
     AudioQueue.h
     GUI.h
     effects.h
+    effects/Effect.h
 )
 
 include_directories(.)

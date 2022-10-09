@@ -14,6 +14,10 @@
 #include <thread>
 #include <chrono>
 
+#include "ui/VolumeWidget.h"
+#include "effects/Volume.h"
+#include "effects/Effect.h"
+
 #include <portaudio.h>
 #include "GUI.h"
 #include "wav.h"
@@ -41,7 +45,7 @@ int record_callback(
     PaStreamCallbackFlags statusFlags,
     void *userData);
 
-void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, std::shared_ptr<EffectController>); 
+void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, std::shared_ptr<EffectController>, std::shared_ptr<float> f); 
 void splitter(AudioQueue<sample_type> *input, AudioQueue<sample_type> *output1, AudioQueue<sample_type> *output2);
 
 int main(int argc, char *argv[])
@@ -54,7 +58,9 @@ int main(int argc, char *argv[])
     audio_out.format = format;
     effects.format = format;
     display.format = format;
+
     std::shared_ptr<EffectController> controller= std::make_shared<EffectController>();
+    std::shared_ptr<float> volume = std::make_shared<float>(0.5);
 
     PaStream *stream;
     PaStream *record_stream;
@@ -63,7 +69,7 @@ int main(int argc, char *argv[])
     //build a track with channels
     //build a callback
     
-    std::thread t(effect_thread, &audio_in, &effects, controller);
+    std::thread t(effect_thread, &audio_in, &effects, controller, volume);
     std::thread t2(splitter, &effects, &audio_out, &display);
 
     Pa_Initialize();
@@ -74,7 +80,8 @@ int main(int argc, char *argv[])
     Pa_StartStream(stream);
 
     ui::GUI g;
-    g.initialize(controller, &display);
+    std::shared_ptr<ui::VolumeWidget> v = make_shared<ui::VolumeWidget>(volume);
+    g.initialize(controller, &display, v);
 
     while(!g.shouldQuit) {
         g.handle_event();
@@ -103,7 +110,9 @@ void splitter(AudioQueue<sample_type> *input, AudioQueue<sample_type> *output1, 
     }
 }
 
-void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, std::shared_ptr<EffectController> controller) {
+void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, std::shared_ptr<EffectController> controller, std::shared_ptr<float> f) {
+    audio::effects::Volume vol(f);
+
     while (1) {
         if (!in->_queue.empty()) {
             AudioBuffer last = in->_queue.front();
@@ -139,7 +148,7 @@ void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, st
                 last = next;
             }
 
-            next = audio::effects::volume(last, controller->volume);
+            next = vol(last);
             out->_queue.push_back(next);
 
         }
