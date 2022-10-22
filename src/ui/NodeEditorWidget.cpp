@@ -71,7 +71,7 @@ void NodeEditorWidget::render() {
     ImNodes::EndNode();
 
     // render links
-    for (int i = 0; i < links.size(); ++i)
+    for (unsigned int i = 0; i < links.size(); ++i)
     {
         const std::pair<int, int> p = links[i];
         ImNodes::Link(i, p.first, p.second);

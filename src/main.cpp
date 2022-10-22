@@ -73,8 +73,8 @@ int main(int argc, char *argv[])
     std::thread t2(splitter, &effects, &audio_out, &display);
 
     Pa_Initialize();
-    PaError err = Pa_OpenDefaultStream(&stream, 0, format.channels, paInt16, format.sampleRate, format.bufferSize, play_callback, (void *) &audio_out);
-    PaError err2 = Pa_OpenDefaultStream(&record_stream, format.channels, 0, paInt16, format.sampleRate, format.bufferSize, record_callback, (void *) &audio_in);
+    Pa_OpenDefaultStream(&stream, 0, format.channels, paInt16, format.sampleRate, format.bufferSize, play_callback, (void *) &audio_out);
+    Pa_OpenDefaultStream(&record_stream, format.channels, 0, paInt16, format.sampleRate, format.bufferSize, record_callback, (void *) &audio_in);
 
     Pa_StartStream(record_stream);
     Pa_StartStream(stream);
