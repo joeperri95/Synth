@@ -2,3 +2,15 @@
 An audio processing program
 Most dependencies are installed via conan
 You need to have portaudio installed manually.
+
+
+
+## GUI
+
+### ControlWidget
+These are imgui widgets that control and individual pipeline node
+
+### NodeWidget
+These live in the nodeEditorWidget
+They have input and outputs 
+Graphical representation of a pipeline

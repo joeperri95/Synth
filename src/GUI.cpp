@@ -62,7 +62,6 @@ void GUI::render() {
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    bool enable_nodes = false;
     ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.40f, 1.00f);
 
     v->render();
@@ -213,45 +212,7 @@ void GUI::render() {
     }  
 
     nodes.render();
-    if (enable_nodes) {
-        ImGui::Begin("Nodes");
-        static bool sel = false;
 
-        ImNodes::BeginNodeEditor();
-
-        ImNodes::BeginNode(1);
-        ImNodes::BeginOutputAttribute(1);
-        if(sel) {
-            ImGui::Text("got me");
-        }
-        else {
-            ImGui::Text("output pin");
-        }
-        ImNodes::EndOutputAttribute();
-        ImNodes::EndNode();
-
-        ImNodes::BeginNode(2);
-        ImNodes::BeginInputAttribute(2);
-        ImGui::Text("input pin");
-        ImNodes::EndInputAttribute();
-        ImNodes::EndNode();
-        
-        ImNodes::EndNodeEditor();
-        int num_selected_nodes = ImNodes::NumSelectedNodes();
-        if (num_selected_nodes > 0)
-        {
-            std::vector<int> selected_nodes;
-            selected_nodes.resize(num_selected_nodes);
-            ImNodes::GetSelectedNodes(selected_nodes.data());
-            if (selected_nodes[0] == 1) {
-                sel = true;
-            }
-            else {
-                sel = false;
-            }
-        }
-        ImGui::End();
-    }
     // Rendering
     ImGui::Render();
     SDL_SetRenderDrawColor(renderer.get(), (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));

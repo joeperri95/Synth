@@ -2,9 +2,10 @@
 
 namespace ui {
 
-VolumeNodeWidget::VolumeNodeWidget() {
-    input=3;
-    output=4;
+VolumeNodeWidget::VolumeNodeWidget(int id, int input, int output) {
+    this->input=input;
+    this->output=output;
+    this->id=id;
 }
 VolumeNodeWidget::~VolumeNodeWidget() {}
 

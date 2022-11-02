@@ -18,6 +18,8 @@ set(Sources
     ui/VolumeWidget.cpp
     ui/NodeEditorWidget.cpp
     ui/VolumeNodeWidget.cpp
+    ui/SinkNodeWidget.cpp
+    ui/SourceNodeWidget.cpp
 )
 
 set(Headers

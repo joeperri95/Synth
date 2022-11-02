@@ -7,7 +7,7 @@
 namespace ui {
 class VolumeNodeWidget : public NodeWidget {
 public:
-    VolumeNodeWidget();
+    VolumeNodeWidget(int id, int input, int output);
     ~VolumeNodeWidget();
 
     void render();

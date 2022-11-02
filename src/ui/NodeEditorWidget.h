@@ -16,7 +16,10 @@ public:
     void render();
 
 protected:
-    std::vector<std::pair<int, int>> links;
+    std::map<int, std::pair<int, int>> links;
     std::map<int, std::unique_ptr<NodeWidget>> nodes;
+    int nextID;
+    int nextNodeID;
+    int nextLinkID;
 };
 }

@@ -1,10 +1,23 @@
 #include "NodeEditorWidget.h"
 #include "VolumeNodeWidget.h"
+#include "SourceNodeWidget.h"
+#include "SinkNodeWidget.h"
+#include <iostream>
+
 namespace ui {
 
 NodeEditorWidget::NodeEditorWidget() {
-    this->nodes.insert({0,std::unique_ptr<NodeWidget>(new VolumeNodeWidget())});
+    nextID = 1;
+    nextNodeID = 1;
+    nextLinkID = 1;
+    this->nodes.insert({nextID, std::unique_ptr<NodeWidget>(new SourceNodeWidget(nextID++, nextNodeID++))});
+    this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new SinkNodeWidget(nextID++, nextNodeID++))});
+    this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
+    nextNodeID += 2;
+    this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
+    nextNodeID += 2;
 }
+
 
 NodeEditorWidget::~NodeEditorWidget() {}
 
@@ -32,46 +45,32 @@ void NodeEditorWidget::render() {
     {
         ImGui::OpenPopup("add node");
     }
+
     // context menu items
     if (ImGui::BeginPopup("add node"))
-    {
+    { 
         if (ImGui::MenuItem("add"))
         {
+            this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
+            nextNodeID += 2;
         }
 
         if (ImGui::MenuItem("sine"))
         {
+            std::cout << "sine" << std::endl;
         }
 
         if (ImGui::MenuItem("time"))
         {
+            std::cout << "time"  << std::endl;
         }
 
         ImGui::EndPopup();
     }
     ImGui::PopStyleVar();
 
-    // demo nodes
-    ImNodes::BeginNode(1);
-    ImNodes::BeginOutputAttribute(1);
-    if(sel) {
-        ImGui::Text("selected");
-    }
-    else {
-        ImGui::Text("output pin");
-    }
-
-    ImNodes::EndOutputAttribute();
-    ImNodes::EndNode();
-
-    ImNodes::BeginNode(2);
-    ImNodes::BeginInputAttribute(2);
-    ImGui::Text("input pin");
-    ImNodes::EndInputAttribute();
-    ImNodes::EndNode();
-
     // render links
-    for (unsigned int i = 0; i < links.size(); ++i)
+    for (unsigned int i = 1; i < links.size(); ++i)
     {
         const std::pair<int, int> p = links[i];
         ImNodes::Link(i, p.first, p.second);
@@ -82,7 +81,13 @@ void NodeEditorWidget::render() {
     int start_attr, end_attr;
     if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
     {
-        links.push_back(std::make_pair(start_attr, end_attr));
+        links[nextLinkID++] = std::make_pair(start_attr, end_attr);
+    }
+
+    int out_attr;
+    if (ImNodes::IsLinkDestroyed(&out_attr))
+    {
+        links.erase(out_attr);
     }
 
     // get selected nodes

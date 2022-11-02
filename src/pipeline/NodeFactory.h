@@ -2,11 +2,21 @@
 
 #include "Node.h"
 
+#include <string>
+#include <memory>
+
 namespace pipeline {
 
 class NodeFactory {
 public:
-    LinkID getNextLinkID();
+    NodeFactory();
+    ~NodeFactory();
+
+    std::unique_ptr<Node> createNode(std::string recipe);
+
+private:
+    LinkID nextLinkID;
+    NodeID nextNodeID;
 };
 
 } // pipeline
