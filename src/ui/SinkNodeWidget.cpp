@@ -10,9 +10,11 @@ SinkNodeWidget::~SinkNodeWidget() {}
 
 void SinkNodeWidget::render() {
     ImNodes::BeginNode(this->id);
+    ImNodes::PushAttributeFlag(ImNodesAttributeFlags_EnableLinkDetachWithDragClick);
     ImNodes::BeginInputAttribute(this->input);
     ImGui::Text("input pin");
     ImNodes::EndInputAttribute();
+    ImNodes::PopAttributeFlag();
     ImNodes::EndNode();
 }
 

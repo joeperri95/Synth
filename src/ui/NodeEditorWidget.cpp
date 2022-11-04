@@ -24,11 +24,10 @@ NodeEditorWidget::~NodeEditorWidget() {}
 void NodeEditorWidget::render() {
 
     ImGui::Begin(this->_name.c_str());
-    static bool sel = false;
-
 
     ImNodes::BeginNodeEditor();
 
+    //for(const auto &it : controller->getNodes()) {
     for(const auto &it : nodes) {
         it.second->render();
     }
@@ -51,6 +50,7 @@ void NodeEditorWidget::render() {
     { 
         if (ImGui::MenuItem("add"))
         {
+            // controller->addNode("volume");
             this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
             nextNodeID += 2;
         }
@@ -70,23 +70,36 @@ void NodeEditorWidget::render() {
     ImGui::PopStyleVar();
 
     // render links
-    for (unsigned int i = 1; i < links.size(); ++i)
+    /*
+    auto links = controller->getLinks();
+    for (auto it = links.begin(); it != links.end(); it++)
     {
-        const std::pair<int, int> p = links[i];
-        ImNodes::Link(i, p.first, p.second);
+        const std::pair<int, int> p = links[it->first];
+        ImNodes::Link(it->first, p.first, p.second);
+    }
+    */
+
+    for (auto it = links.begin(); it != links.end(); it++)
+    {
+        const std::pair<int, int> p = links[it->first];
+        ImNodes::Link(it->first, p.first, p.second);
     } 
+
     ImNodes::EndNodeEditor();
 
     // check for connections
     int start_attr, end_attr;
     if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
     {
+        //controller->addLink(start_attr, end_attr);
         links[nextLinkID++] = std::make_pair(start_attr, end_attr);
     }
 
+    // check for removed connections
     int out_attr;
     if (ImNodes::IsLinkDestroyed(&out_attr))
     {
+        //controller->removeLink(out_attr);
         links.erase(out_attr);
     }
 
@@ -97,12 +110,11 @@ void NodeEditorWidget::render() {
         std::vector<int> selected_nodes;
         selected_nodes.resize(num_selected_nodes);
         ImNodes::GetSelectedNodes(selected_nodes.data());
-        if (selected_nodes[0] == 1) {
-            sel = true;
+
+        for (auto it : selected_nodes) {
+            // controller->selectNode(it);
         }
-        else {
-            sel = false;
-        }
+        
     }
 
     ImGui::End();

@@ -33,10 +33,20 @@ public:
         T sample = _buffer[_head];
         _head = (_head + 1) % _capacity;
         
-        return T;
+        return sample;
     };
 
-    T pop_or_zero() override;
+    T pop_or_zero() override{
+        std::lock_guard<std::mutex> lock(_mutex);
+        if (this->empty()) {
+            return 0;
+        } else {
+            T sample = _buffer[_head];
+            _head = (_head + 1) % _capacity;
+
+            return sample; 
+        }
+    }
 
     bool empty() override {
         return !_full && (_head == _tail);

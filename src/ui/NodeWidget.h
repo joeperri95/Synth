@@ -11,6 +11,7 @@ public:
     virtual ~NodeWidget() = 0;
 
     virtual void render() = 0;
+    virtual void onSelected() {};
 
 protected:
     int id;

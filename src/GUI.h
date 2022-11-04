@@ -11,7 +11,7 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
 #include "sample_type.h"
-#include "EffectController.h"
+#include "effectController.h"
 #include "AudioQueue.h"
 #include "AudioBuffer.h"
 #include "ui/ControlWidget.h"
@@ -41,16 +41,22 @@ public:
 
     bool shouldQuit;
 private:
+    // common
     std::unique_ptr<SDL_Renderer, sdl_deleter> renderer; 
     std::unique_ptr<SDL_Window, sdl_deleter> window; 
     SDL_Event event;
     std::string title;
     int height;
     int width;
+
+    // to deprecate
     std::shared_ptr<EffectController> controller;
     audio::AudioQueue<sample_type> *queue;
     std::shared_ptr<ui::VolumeWidget> v;
     NodeEditorWidget nodes;
+
+    // new
+    std::vector<std::unique_ptr<ControlWidget>> widgets;
 };
     
 }

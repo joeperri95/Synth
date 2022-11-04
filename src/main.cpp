@@ -21,7 +21,7 @@
 #include <portaudio.h>
 #include "GUI.h"
 #include "wav.h"
-#include "EffectController.h"
+#include "effectController.h"
 #include "AudioBuffer.h"
 #include "AudioFormat.h"
 #include "AudioQueue.h"

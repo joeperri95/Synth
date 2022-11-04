@@ -10,7 +10,8 @@ public:
     VolumeNodeWidget(int id, int input, int output);
     ~VolumeNodeWidget();
 
-    void render();
+    void render() override;
+    void onSelected() override;
 
 protected:
     int input;

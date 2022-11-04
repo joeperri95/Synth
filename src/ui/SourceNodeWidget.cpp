@@ -10,9 +10,11 @@ SourceNodeWidget::~SourceNodeWidget() {}
 
 void SourceNodeWidget::render() {
     ImNodes::BeginNode(this->id);
+    ImNodes::PushAttributeFlag(ImNodesAttributeFlags_EnableLinkDetachWithDragClick);
     ImNodes::BeginOutputAttribute(output);
     ImGui::Text("output pin");
     ImNodes::EndOutputAttribute();
+    ImNodes::PopAttributeFlag();
     ImNodes::EndNode();
 }
 

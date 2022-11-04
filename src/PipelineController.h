@@ -1,0 +1,43 @@
+#pragma once
+
+#include <string>
+#include <map>
+#include <memory>
+#include <set>
+
+#include "pipeline/Pipeline.h"
+#include "pipeline/Node.h"
+#include "ui/NodeWidget.h"
+
+using pipeline::LinkID;
+using pipeline::NodeID;
+
+class PipelineController {
+  public:
+    PipelineController();
+    ~PipelineController();
+
+    NodeID addNode(std::string recipe);
+    void removeNode(NodeID node);
+
+    void selectNode(NodeID node);
+
+    LinkID addLink(int start, int end);
+    void removeLink(LinkID link);
+
+    std::vector<std::pair<int, int>> getLinks();
+    std::vector<std::shared_ptr<ui::NodeWidget>> getNodes();
+
+  private:
+    // Pipeline section
+    pipeline::Pipeline pipeline;
+
+    // ImNode section
+    std::map<LinkID, std::pair<int, int>> links;
+    std::map<NodeID, std::shared_ptr<ui::NodeWidget>> nodes;
+    std::set<NodeID> selectedNodes;
+
+    LinkID nextLinkID;
+    NodeID nextNodeID;
+
+};

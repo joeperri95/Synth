@@ -5,6 +5,8 @@
 
 namespace audio {
 
+// deprecate this and use ringbuffers instead
+
 template<typename T>
 class AudioBuffer
 {

@@ -6,14 +6,14 @@ namespace pipeline {
 
 class Pipeline {
 public:
-
-    void addNode(Node n);
-    void linkNodes(LinkID ll, LinkID l2);
-    void removeLink(LinkID l1);
+    void addNode(NodeID id, std::string recipe);
+    void removeNode(NodeID id);
+    void linkNodes(LinkID id, int l1, int l2);
+    void removeLink(LinkID id);
 
 private:
-    std::vector<Node> nodes;
-    std::vector<std::pair<LinkID, LinkID>> links;
+    std::map<NodeID, std::unique_ptr<Node>> nodes;
+    std::map<LinkID, std::pair<int, int>> links;
 };
 
 }
