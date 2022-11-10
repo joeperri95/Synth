@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Node.h"
+#include <string>
+#include <map>
+#include <memory>
 
 namespace pipeline {
 

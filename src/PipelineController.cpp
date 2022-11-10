@@ -3,8 +3,7 @@
 using pipeline::LinkID;
 using pipeline::NodeID;
 
-PipelineController::PipelineController() {
-
+PipelineController::PipelineController() : pipeline(), links(), nodes(), selectedNodes(), nextNodeID(0), nextLinkID(0), factory(){
 }
 
 PipelineController::~PipelineController() {
@@ -12,11 +11,15 @@ PipelineController::~PipelineController() {
 }
 
 NodeID PipelineController::addNode(std::string recipe) {
-    this->pipeline.addNode(recipe);
+    int ret = nextNodeID;
+    this->pipeline.addNode(ret, recipe);
+    this->nodes.insert(std::make_pair(ret, factory.create(recipe)));
+    return ret;
 }
 
 void PipelineController::removeNode(NodeID node) {
-
+    this->pipeline.removeNode(node);
+    this->nodes.erase(node);
 }
 
 void PipelineController::selectNodes(std::vector<NodeID> nodes) {
@@ -30,11 +33,15 @@ void PipelineController::selectNodes(std::vector<NodeID> nodes) {
             newSelected.insert(node);
         }
     }
+    this->selectedNodes = newSelected;
 }
 
 LinkID PipelineController::addLink(int start, int end) {
-    this->links[nextLinkID++] = std::make_pair(start,end);
-    this->pipeline.linkNodes();
+    int ret = nextLinkID;
+    this->links[nextLinkID++] = std::make_pair(start, end);
+    this->pipeline.linkNodes(ret, start, end);
+
+    return ret; 
 }
 
 void PipelineController::removeLink(LinkID link) {
@@ -44,15 +51,15 @@ void PipelineController::removeLink(LinkID link) {
 std::vector<std::pair<int, int>> PipelineController::getLinks() {
     std::vector<std::pair<int, int>> ret;
     for (auto it: this->links) {
-        ret->push_back(it);
+        ret.push_back(it.second);
     }
     return ret;
 }
 
 std::vector<std::shared_ptr<ui::NodeWidget>> PipelineController::getNodes() {
-    std::vector<std::pair<int, int>> ret;
+    std::vector<std::shared_ptr<ui::NodeWidget>> ret;
     for (auto it: this->nodes) {
-        ret->push_back(it);
+        ret.push_back(it.second);
     }
     return ret;
 }

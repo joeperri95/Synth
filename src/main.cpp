@@ -25,6 +25,7 @@
 #include "AudioBuffer.h"
 #include "AudioFormat.h"
 #include "AudioQueue.h"
+#include "AudioDevice.h"
 #include "effects.h"
 
 using audio::AudioBuffer;

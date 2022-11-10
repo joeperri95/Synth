@@ -17,9 +17,15 @@ set(Sources
     effects/Volume.cpp
     ui/VolumeWidget.cpp
     ui/NodeEditorWidget.cpp
+    ui/NodeWidgetFactory.cpp
     ui/VolumeNodeWidget.cpp
     ui/SinkNodeWidget.cpp
     ui/SourceNodeWidget.cpp
+    pipeline/Pipeline.cpp
+    AudioDevice.cpp
+    PipelineController.cpp
+    LockingRingBuffer.h
+    AttributeInfo.cpp
 )
 
 set(Headers

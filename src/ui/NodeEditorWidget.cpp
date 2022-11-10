@@ -114,7 +114,6 @@ void NodeEditorWidget::render() {
         for (auto it : selected_nodes) {
             // controller->selectNode(it);
         }
-        
     }
 
     ImGui::End();

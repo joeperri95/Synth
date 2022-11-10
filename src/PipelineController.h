@@ -9,6 +9,8 @@
 #include "pipeline/Node.h"
 #include "ui/NodeWidget.h"
 
+#include "ui/NodeWidgetFactory.h"
+
 using pipeline::LinkID;
 using pipeline::NodeID;
 
@@ -20,7 +22,7 @@ class PipelineController {
     NodeID addNode(std::string recipe);
     void removeNode(NodeID node);
 
-    void selectNode(NodeID node);
+    void selectNodes(std::vector<NodeID> nodes);
 
     LinkID addLink(int start, int end);
     void removeLink(LinkID link);
@@ -39,5 +41,7 @@ class PipelineController {
 
     LinkID nextLinkID;
     NodeID nextNodeID;
+
+    ui::NodeWidgetFactory factory; 
 
 };

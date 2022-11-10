@@ -13,10 +13,8 @@ public:
     ~NodeFactory();
 
     std::unique_ptr<Node> createNode(std::string recipe);
-
 private:
-    LinkID nextLinkID;
-    NodeID nextNodeID;
+
 };
 
 } // pipeline
