@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AudioBuffer.h"
+#include "common/AudioBuffer.h"
 #include "AudioFormat.h"
 #include "AudioQueue.h"
 #include <cmath>

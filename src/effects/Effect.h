@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AudioBuffer.h"
+#include "common/AudioBuffer.h"
 #include "sample_type.h"
 
 namespace audio { namespace effects {

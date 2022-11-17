@@ -7,7 +7,7 @@
 #include "../../external/imnodes/imnodes.h"
 #include "SDL_keycode.h"
 #include "NodeWidget.h"
-#include "PipelineController.h"
+#include "common/PipelineController.h"
 
 namespace ui {
 class NodeEditorWidget : ControlWidget {

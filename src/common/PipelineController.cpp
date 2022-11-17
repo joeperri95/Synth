@@ -3,7 +3,7 @@
 using pipeline::LinkID;
 using pipeline::NodeID;
 
-PipelineController::PipelineController() : pipeline(), links(), nodes(), selectedNodes(), nextNodeID(0), nextLinkID(0), factory(){
+PipelineController::PipelineController() : mutex(), pipeline(), links(), nodes(), selectedNodes(), nextNodeID(1), nextLinkID(1), factory(){
 }
 
 PipelineController::~PipelineController() {
@@ -11,18 +11,21 @@ PipelineController::~PipelineController() {
 }
 
 NodeID PipelineController::addNode(std::string recipe) {
-    int ret = nextNodeID;
+    std::lock_guard lock(this->mutex);
+    int ret = nextNodeID++;
     this->pipeline.addNode(ret, recipe);
-    this->nodes.insert(std::make_pair(ret, factory.create(recipe)));
+    this->nodes.insert(std::make_pair(ret, factory.create(ret, recipe)));
     return ret;
 }
 
 void PipelineController::removeNode(NodeID node) {
+    std::lock_guard lock(this->mutex);
     this->pipeline.removeNode(node);
     this->nodes.erase(node);
 }
 
 void PipelineController::selectNodes(std::vector<NodeID> nodes) {
+    std::lock_guard lock(this->mutex);
     std::set<NodeID> newSelected;
     for (auto node: nodes) {
         if (this->selectedNodes.contains(node)) {
@@ -37,29 +40,31 @@ void PipelineController::selectNodes(std::vector<NodeID> nodes) {
 }
 
 LinkID PipelineController::addLink(int start, int end) {
-    int ret = nextLinkID;
-    this->links[nextLinkID++] = std::make_pair(start, end);
+    std::lock_guard lock(this->mutex);
+    int ret = nextLinkID++;
+    std::cout << "created link: " << ret << " start: " << start << " end: " << end << std::endl;
+    this->links[ret] = std::make_pair(start, end);
     this->pipeline.linkNodes(ret, start, end);
 
     return ret; 
 }
 
 void PipelineController::removeLink(LinkID link) {
+    std::lock_guard lock(this->mutex);
     this->links.erase(link);
+    this->pipeline.removeLink(link);
 }
 
-std::vector<std::pair<int, int>> PipelineController::getLinks() {
-    std::vector<std::pair<int, int>> ret;
-    for (auto it: this->links) {
-        ret.push_back(it.second);
-    }
-    return ret;
+std::map<LinkID, std::pair<int, int>> PipelineController::getLinks() {
+    std::lock_guard lock(this->mutex);
+    return this->links;
 }
 
 std::vector<std::shared_ptr<ui::NodeWidget>> PipelineController::getNodes() {
+    std::lock_guard lock(this->mutex);
     std::vector<std::shared_ptr<ui::NodeWidget>> ret;
-    for (auto it: this->nodes) {
-        ret.push_back(it.second);
+    for (const auto & [key, value]: this->nodes) {
+        ret.push_back(value);
     }
     return ret;
 }

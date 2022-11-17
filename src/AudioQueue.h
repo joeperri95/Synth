@@ -3,7 +3,7 @@
 #include <mutex>
 #include <queue>
 #include "AudioFormat.h"
-#include "AudioBuffer.h"
+#include "common/AudioBuffer.h"
 
 namespace audio {
 

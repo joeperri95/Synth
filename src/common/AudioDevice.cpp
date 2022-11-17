@@ -4,7 +4,6 @@ AudioDevice::AudioDevice() : nextStreamID(0), state(AudioDeviceState::IDLE), str
 }
 
 AudioDevice::~AudioDevice(){
-
 }
 
 void AudioDevice::initialize() {

@@ -22,11 +22,10 @@ void VolumeNodeWidget::render() {
     ImNodes::EndOutputAttribute();
     ImNodes::PopAttributeFlag();
     ImNodes::EndNode();
-
 }
 
 void VolumeNodeWidget::onSelected() {
-    std::cout << "Ooh I got clicked" << std::endl;
+    std::cout << "(" << this->id << ") got clicked" << std::endl;
 }
 
 }

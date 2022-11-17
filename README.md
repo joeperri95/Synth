@@ -14,3 +14,6 @@ These are imgui widgets that control and individual pipeline node
 These live in the nodeEditorWidget
 They have input and outputs 
 Graphical representation of a pipeline
+
+## PipelineController
+This is the bridge between the graphical nodewidgets and the actual audio pipeline

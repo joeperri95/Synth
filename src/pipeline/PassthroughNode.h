@@ -12,7 +12,7 @@ typedef short sample_type;
 namespace pipeline {
 
 template <typename T>
-class PassthroughNode : protected FilterNode {
+class PassthroughNode : protected Node {
 public:
     PassthroughNode();
     ~PassthroughNode();

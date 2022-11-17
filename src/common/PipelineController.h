@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <mutex>
 
 #include "pipeline/Pipeline.h"
 #include "pipeline/Node.h"
@@ -27,10 +28,12 @@ class PipelineController {
     LinkID addLink(int start, int end);
     void removeLink(LinkID link);
 
-    std::vector<std::pair<int, int>> getLinks();
+    std::map<LinkID, std::pair<int, int>> getLinks();
     std::vector<std::shared_ptr<ui::NodeWidget>> getNodes();
 
   private:
+    std::mutex mutex;
+  
     // Pipeline section
     pipeline::Pipeline pipeline;
 

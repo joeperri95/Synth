@@ -1,6 +1,19 @@
 #pragma once
 
 #include <vector>
+#include <string>
+
+typedef enum AttributeType {
+    INPUT,
+    OUTPUT,
+};
+
+struct Attribute {
+    int id;
+    std::string name;
+    bool required;
+    AttributeType type;
+};
 
 class AttributeInfo {
 

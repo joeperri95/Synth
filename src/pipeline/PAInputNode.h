@@ -13,8 +13,6 @@
 #define BIT_DEPTH 8 
 
 
-typedef short sample_type;
-
 namespace pipeline {
 
 int play_callback(

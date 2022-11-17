@@ -12,7 +12,7 @@ class NodeWidgetFactory {
 public:
     NodeWidgetFactory();
     ~NodeWidgetFactory();
-    std::unique_ptr<NodeWidget> create(std::string s); 
+    std::unique_ptr<NodeWidget> create(int id, std::string s); 
 
 private:
     int nextAttrID;

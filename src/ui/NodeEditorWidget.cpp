@@ -7,15 +7,7 @@
 namespace ui {
 
 NodeEditorWidget::NodeEditorWidget() {
-    nextID = 1;
-    nextNodeID = 1;
-    nextLinkID = 1;
-    this->nodes.insert({nextID, std::unique_ptr<NodeWidget>(new SourceNodeWidget(nextID++, nextNodeID++))});
-    this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new SinkNodeWidget(nextID++, nextNodeID++))});
-    this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
-    nextNodeID += 2;
-    this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
-    nextNodeID += 2;
+    this->controller = std::make_shared<PipelineController>();
 }
 
 
@@ -27,9 +19,10 @@ void NodeEditorWidget::render() {
 
     ImNodes::BeginNodeEditor();
 
-    //for(const auto &it : controller->getNodes()) {
+    std::vector<std::shared_ptr<NodeWidget>> nodes = controller->getNodes();
+
     for(const auto &it : nodes) {
-        it.second->render();
+        it->render();
     }
 
     // check for right mouse
@@ -50,9 +43,7 @@ void NodeEditorWidget::render() {
     { 
         if (ImGui::MenuItem("add"))
         {
-            // controller->addNode("volume");
-            this->nodes.insert({nextID,std::unique_ptr<NodeWidget>(new VolumeNodeWidget(nextID++, nextNodeID, nextNodeID + 1))});
-            nextNodeID += 2;
+            controller->addNode("volume");
         }
 
         if (ImGui::MenuItem("sine"))
@@ -70,20 +61,13 @@ void NodeEditorWidget::render() {
     ImGui::PopStyleVar();
 
     // render links
-    /*
-    auto links = controller->getLinks();
-    for (auto it = links.begin(); it != links.end(); it++)
+    
+    std::map<LinkID, std::pair<int, int>> links = controller->getLinks();
+    for (const auto &[linkid, pair]: links)
     {
-        const std::pair<int, int> p = links[it->first];
-        ImNodes::Link(it->first, p.first, p.second);
+        ImNodes::Link(linkid, pair.first, pair.second);
     }
-    */
-
-    for (auto it = links.begin(); it != links.end(); it++)
-    {
-        const std::pair<int, int> p = links[it->first];
-        ImNodes::Link(it->first, p.first, p.second);
-    } 
+    
 
     ImNodes::EndNodeEditor();
 
@@ -91,16 +75,14 @@ void NodeEditorWidget::render() {
     int start_attr, end_attr;
     if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
     {
-        //controller->addLink(start_attr, end_attr);
-        links[nextLinkID++] = std::make_pair(start_attr, end_attr);
+        controller->addLink(start_attr, end_attr);
     }
 
     // check for removed connections
     int out_attr;
     if (ImNodes::IsLinkDestroyed(&out_attr))
     {
-        //controller->removeLink(out_attr);
-        links.erase(out_attr);
+        controller->removeLink(out_attr);
     }
 
     // get selected nodes
@@ -111,9 +93,12 @@ void NodeEditorWidget::render() {
         selected_nodes.resize(num_selected_nodes);
         ImNodes::GetSelectedNodes(selected_nodes.data());
 
-        for (auto it : selected_nodes) {
-            // controller->selectNode(it);
-        }
+        controller->selectNodes(selected_nodes);
+    }
+    else 
+    {
+        std::vector<int> selected_nodes;
+        controller->selectNodes(selected_nodes);
     }
 
     ImGui::End();

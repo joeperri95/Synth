@@ -3,13 +3,18 @@
 #include <memory>
 
 template <typename T>
-concept Numeric = std::is_numeric<T>::value;
+concept Numeric = requires(T param) {
+    requires std::is_integral_v<T> || std::is_floating_point_v<T>;
+    requires !std::is_same_v<bool, T>;
+    requires std::is_arithmetic_v<decltype(param +1)>;
+    requires !std::is_pointer_v<T>;
+};
 
 template <Numeric T>
 class RingBuffer {
 public:
     RingBuffer(int capacity);
-    virtual ~RingBuffer() = 0
+    virtual ~RingBuffer() = 0;
 
     // Push a new sample to the end of the queue. 
     // If the queue is full replace the last element with the new sample

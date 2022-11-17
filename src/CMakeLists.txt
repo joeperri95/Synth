@@ -6,7 +6,7 @@ find_package(implot REQUIRED)
 
 set(Sources
     main.cpp
-    GUI.cpp
+    common/GUI.cpp
     ../bindings/imgui_impl_sdl.h
     ../bindings/imgui_impl_sdl.cpp
     ../bindings/imgui_impl_sdlrenderer.h
@@ -22,17 +22,20 @@ set(Sources
     ui/SinkNodeWidget.cpp
     ui/SourceNodeWidget.cpp
     pipeline/Pipeline.cpp
-    AudioDevice.cpp
-    PipelineController.cpp
-    LockingRingBuffer.h
-    AttributeInfo.cpp
+    pipeline/NodeFactory.cpp
+    pipeline/VolumeNode.cpp
+    pipeline/Node.h
+    common/AudioDevice.cpp
+    common/PipelineController.cpp
+    common/LockingRingBuffer.h
+    common/AttributeInfo.cpp
 )
 
 set(Headers
-    AudioBuffer.h
+    common/AudioBuffer.h
     AudioFormat.h 
     AudioQueue.h
-    GUI.h
+    common/GUI.h
     effects.h
     effects/Effect.h
 )

@@ -1,11 +1,10 @@
 #pragma once
 
 #include "RingBuffer.h"
-
 #include <mutex>
 
 template <Numeric T>
-class LockingSPSCRingBuffer : RingBuffer {
+class LockingSPSCRingBuffer : public RingBuffer<T> {
 public:
     explicit LockingSPSCRingBuffer(int capacity) :
         _head(0),
@@ -36,7 +35,7 @@ public:
         return sample;
     };
 
-    T pop_or_zero() override{
+    T pop_or_zero() noexcept override{
         std::lock_guard<std::mutex> lock(_mutex);
         if (this->empty()) {
             return 0;
@@ -48,15 +47,15 @@ public:
         }
     }
 
-    bool empty() override {
+    bool empty() const override {
         return !_full && (_head == _tail);
     }
 
-    bool full() override {
+    bool full() const override {
         return _full;
     };
 
-    int size() override {
+    int size() const override {
         int size = _capacity;
 
         if(!_full)
@@ -74,7 +73,7 @@ public:
         return size;
     }
 
-    int capacity() override {
+    int capacity() const override {
         return _capacity;
     }
 

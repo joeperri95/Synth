@@ -17,7 +17,7 @@ typedef short sample_type;
 namespace pipeline {
 
 template <typename T>
-class PAOutputNode : protected OutputNode {
+class PAOutputNode : protected Node {
 public:
     PAOutputNode();
     ~PAOutputNode();

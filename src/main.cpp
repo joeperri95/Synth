@@ -19,13 +19,13 @@
 #include "effects/Effect.h"
 
 #include <portaudio.h>
-#include "GUI.h"
+#include "common/GUI.h"
 #include "wav.h"
 #include "effectController.h"
-#include "AudioBuffer.h"
+#include "common/AudioBuffer.h"
 #include "AudioFormat.h"
 #include "AudioQueue.h"
-#include "AudioDevice.h"
+#include "common/AudioDevice.h"
 #include "effects.h"
 
 using audio::AudioBuffer;
