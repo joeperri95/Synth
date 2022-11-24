@@ -24,7 +24,9 @@ set(Sources
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
     pipeline/VolumeNode.cpp
-    pipeline/Node.h
+    pipeline/PASinkNode.cpp
+    pipeline/PASourceNode.cpp
+    pipeline/Node.cpp
     common/AudioDevice.cpp
     common/PipelineController.cpp
     common/LockingRingBuffer.h

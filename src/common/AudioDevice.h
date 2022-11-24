@@ -5,6 +5,7 @@
 #include <vector> 
 #include <map> 
 #include <memory> 
+#include <mutex> 
 #include <iostream> 
 
 typedef int StreamID;
@@ -16,7 +17,7 @@ typedef enum {
 
 class AudioDevice {
 public:
-    AudioDevice();
+    static AudioDevice &instance();
     ~AudioDevice();
 
     void initialize();
@@ -29,8 +30,10 @@ public:
     void stopStream(StreamID stream);
 
 private:
+    AudioDevice();
     // PaStream is a typedef of void so smart pointers cannot be used
     std::map<StreamID, PaStream*> streams;
+    std::mutex _mutex;
     AudioDeviceState state;
     StreamID nextStreamID;
 };

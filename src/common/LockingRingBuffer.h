@@ -2,6 +2,7 @@
 
 #include "RingBuffer.h"
 #include <mutex>
+#include <iostream>
 
 template <Numeric T>
 class LockingSPSCRingBuffer : public RingBuffer<T> {
@@ -14,6 +15,9 @@ public:
         _capacity(capacity),
         _mutex()
     {}
+
+    ~LockingSPSCRingBuffer() override {
+    }
 
     void push(T sample) override {
         std::lock_guard<std::mutex> lock(_mutex);

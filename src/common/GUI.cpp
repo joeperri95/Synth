@@ -190,11 +190,14 @@ void GUI::render() {
         int y_data[1024];
         std::vector<sample_type> data(1024);
 
-        if(!queue->_queue.empty()) {
-            audio::AudioBuffer<sample_type> sample = queue->_queue.front();
-            queue->_queue.pop_front();
-            data = sample.getData();
+        if(!queue->empty()) {
+            sample_type sample = queue->pop();
+            data.push_back(sample);
+            if(data.size() >= 1024) {
+                data.erase(data.begin());
+            }
         }
+
 
         for(int i = 0; i < 1024; i++) {
             x_data[i] = i;

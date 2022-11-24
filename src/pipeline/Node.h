@@ -8,6 +8,7 @@
 namespace pipeline {
 
 typedef int LinkID;
+typedef int AttrID;
 typedef int NodeID;
 typedef short sample_type;
 
@@ -16,15 +17,19 @@ public:
     Node();
     virtual ~Node() = 0;
     virtual void update() = 0;
+
+    std::vector<LinkID> getInputs();
+    std::vector<LinkID> getOutputs();
+
+    void setInput(AttrID attr, std::shared_ptr<LockingSPSCRingBuffer<sample_type>> input);
+    void setOutput(AttrID attr, std::shared_ptr<LockingSPSCRingBuffer<sample_type>> output);
+
 protected:
     NodeID _id;
-    std::map<LinkID, std::shared_ptr<LockingSPSCRingBuffer<sample_type>>> inputs;
-    std::map<LinkID, std::shared_ptr<LockingSPSCRingBuffer<sample_type>>> outputs;
+    std::map<AttrID, std::shared_ptr<LockingSPSCRingBuffer<sample_type>>> inputs;
+    std::map<AttrID, std::shared_ptr<LockingSPSCRingBuffer<sample_type>>> outputs;
     unsigned int numInputs;
     unsigned int numOutputs;
 };
-
-inline Node::Node() {}
-inline Node::~Node() {}
 
 }

@@ -1,6 +1,5 @@
 #include "VolumeNodeWidget.h"
 
-#include <iostream>
 
 namespace ui {
 
@@ -22,10 +21,6 @@ void VolumeNodeWidget::render() {
     ImNodes::EndOutputAttribute();
     ImNodes::PopAttributeFlag();
     ImNodes::EndNode();
-}
-
-void VolumeNodeWidget::onSelected() {
-    std::cout << "(" << this->id << ") got clicked" << std::endl;
 }
 
 }

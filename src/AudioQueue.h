@@ -3,18 +3,73 @@
 #include <mutex>
 #include <queue>
 #include "AudioFormat.h"
-#include "common/AudioBuffer.h"
+#include "common/RingBuffer.h"
+
+#include <iostream>
 
 namespace audio {
 
-// deprecate this and use ringbuffers instead
+template<Numeric T>
+class AudioQueue {
+public:
+    AudioQueue() : _mutex(), _queue(nullptr), _format() {}
 
-template<typename T>
-struct AudioQueue {
-    AudioQueue() : _mutex(), _queue(), format() {}
+    void setQueue(std::shared_ptr<RingBuffer<T>> queue) {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        this->_queue = queue;
+    };
+
+    void setFormat(AudioFormat format) {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        this->_format = format;
+    }
+
+    std::shared_ptr<RingBuffer<T>> getQueue() {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        return this->_queue;
+    }
+
+    AudioFormat getFormat() {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        return this->_format;
+    }
+
+    bool empty() {
+        if (this->_queue.get() == nullptr) {
+            return true;
+        }
+        return this->_queue->empty();
+    }
+
+    void push(T t) {
+        if (this->_queue.get() != nullptr) {
+        // std::cout << "AudioQueue: push" << std::endl;
+            this->_queue->push(t);
+        }
+    }
+
+    T pop() {
+        if (this->_queue.get() == nullptr) {
+            return 0;
+        }
+        return this->_queue->pop();
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, AudioQueue& audio) {
+        if (audio._queue.get() == nullptr) {
+            out << "Queue is null" << std::endl;
+        } else {
+            out << "Capacity: " << audio._queue->capacity() << std::endl;
+            out << "Elements: " << audio._queue->size() << std::endl;
+        }
+        return out;
+    }
+
+private:
     std::mutex _mutex;
-    std::deque<AudioBuffer<T>> _queue;
-    AudioFormat format;
+    std::shared_ptr<RingBuffer<T>> _queue;
+    AudioFormat _format;
 };
+
 
 }

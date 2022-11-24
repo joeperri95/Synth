@@ -3,7 +3,7 @@
 using pipeline::LinkID;
 using pipeline::NodeID;
 
-PipelineController::PipelineController() : mutex(), pipeline(), links(), nodes(), selectedNodes(), nextNodeID(1), nextLinkID(1), factory(){
+PipelineController::PipelineController() : mutex(), pipeline(), links(), nodes(), selectedNodes(), nextLinkID(1), nextNodeID(1), factory(){
 }
 
 PipelineController::~PipelineController() {

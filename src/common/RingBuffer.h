@@ -13,7 +13,7 @@ concept Numeric = requires(T param) {
 template <Numeric T>
 class RingBuffer {
 public:
-    RingBuffer(int capacity);
+    RingBuffer() {};
     virtual ~RingBuffer() = 0;
 
     // Push a new sample to the end of the queue. 
@@ -35,3 +35,6 @@ public:
 protected:
     int _capacity;
 };
+
+template <Numeric T>
+inline RingBuffer<T>::~RingBuffer() {}

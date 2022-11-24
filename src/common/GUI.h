@@ -13,7 +13,6 @@
 #include "sample_type.h"
 #include "effectController.h"
 #include "AudioQueue.h"
-#include "AudioBuffer.h"
 #include "ui/ControlWidget.h"
 #include "ui/VolumeWidget.h"
 #include "ui/VolumeNodeWidget.h"

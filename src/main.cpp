@@ -51,34 +51,13 @@ void splitter(AudioQueue<sample_type> *input, AudioQueue<sample_type> *output1, 
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Device initializing " << std::endl;
-
     AudioFormat format(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
-    AudioQueue<sample_type> audio_in, audio_out, effects, display;
-    audio_in.format = format;
-    audio_out.format = format;
-    effects.format = format;
-    display.format = format;
+
+    AudioQueue<sample_type> display;
+    display.setFormat({CHANNELS, SAMPLE_RATE,BIT_DEPTH, BUFF_SIZE});
 
     std::shared_ptr<EffectController> controller= std::make_shared<EffectController>();
     std::shared_ptr<float> volume = std::make_shared<float>(0.5);
-
-    PaStream *stream;
-    PaStream *record_stream;
-
-    std::cout << format.channels << " " << format.sampleRate << " " << format.bufferSize << std::endl;
-    //build a track with channels
-    //build a callback
-    
-    std::thread t(effect_thread, &audio_in, &effects, controller, volume);
-    std::thread t2(splitter, &effects, &audio_out, &display);
-
-    Pa_Initialize();
-    Pa_OpenDefaultStream(&stream, 0, format.channels, paInt16, format.sampleRate, format.bufferSize, play_callback, (void *) &audio_out);
-    Pa_OpenDefaultStream(&record_stream, format.channels, 0, paInt16, format.sampleRate, format.bufferSize, record_callback, (void *) &audio_in);
-
-    Pa_StartStream(record_stream);
-    Pa_StartStream(stream);
 
     ui::GUI g;
     std::shared_ptr<ui::VolumeWidget> v = make_shared<ui::VolumeWidget>(volume);
@@ -92,20 +71,16 @@ int main(int argc, char *argv[])
 
     g.shut_down();
 
-    Pa_CloseStream(stream);
-    Pa_Terminate();
-
     return 0;
 }
 
 void splitter(AudioQueue<sample_type> *input, AudioQueue<sample_type> *output1, AudioQueue<sample_type> *output2)
 {    
     while(1) {
-        if(!input->_queue.empty()) {
-            AudioBuffer<sample_type> sample = input->_queue.front();
-            input->_queue.pop_front();
-            output1->_queue.push_back(sample);
-            output2->_queue.push_back(sample);
+        if(!input->empty()) {
+            sample_type sample = input->pop();
+            output1->push(sample);
+            output2->push(sample);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
@@ -115,11 +90,11 @@ void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, st
     audio::effects::Volume vol(f);
 
     while (1) {
-        if (!in->_queue.empty()) {
-            AudioBuffer last = in->_queue.front();
-            AudioBuffer<sample_type> next(last.getFormat());
+        if (!in->empty()) {
+            sample_type last = in->pop();
 
-            in->_queue.pop_front();
+            /* DEPRECATED 
+            sample_type next;
 
             next = audio::effects::volume(last, 0.5);
             last = next;
@@ -150,67 +125,13 @@ void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, st
             }
 
             next = vol(last);
-            out->_queue.push_back(next);
+
+            */ 
+
+            out->push(last);
 
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
-}
-
-int play_callback(
-    const void *inputBuffer, void *outputBuffer,
-    unsigned long bufferSize,
-    const PaStreamCallbackTimeInfo *timeInfo,
-    PaStreamCallbackFlags statusFlags,
-    void *userData) {
-
-    AudioQueue<sample_type> *queue = (AudioQueue<sample_type> *)userData;
-
-    if (queue->_queue.empty()) {
-        return paContinue;
-    }
-
-    AudioFormat format = queue->format;
-    AudioBuffer buffer = queue->_queue.front();
-    queue->_queue.pop_front();
-    std::vector<sample_type> data = buffer.getData();
-    short *output = (short *)outputBuffer;    
-
-    for (int i = 0; i < format.bufferSize; i++)
-    {
-        for (int j = 0; j < format.channels; j++)
-        {
-            short sample = data.at(i * format.channels + j);
-            *(output + i * format.channels + j) = sample;
-        }
-    }
-
-    return paContinue;
-}
-
-int record_callback(
-    const void *inputBuffer, void *outputBuffer,
-    unsigned long bufferSize,
-    const PaStreamCallbackTimeInfo *timeInfo,
-    PaStreamCallbackFlags statusFlags,
-    void *userData)
-{
-    AudioQueue<sample_type> *queue = (AudioQueue<sample_type> *)userData;
-    AudioFormat format = queue->format;
-    std::vector<sample_type> data(format.getSamplesPerBuffer());
-    short *input = (short *)inputBuffer;    
-
-    for (int i = 0; i < format.bufferSize; i++)
-    {
-        for (int j = 0; j < format.channels; j++)
-        {
-            short sample = *(input + i * format.channels + j);
-            data.at(i * format.channels + j) = sample;
-        }
-    }
-
-    AudioBuffer buffer(format, data);
-    queue->_queue.push_back(buffer);
-    return paContinue;
 }

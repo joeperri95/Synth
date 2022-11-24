@@ -41,19 +41,19 @@ void NodeEditorWidget::render() {
     // context menu items
     if (ImGui::BeginPopup("add node"))
     { 
-        if (ImGui::MenuItem("add"))
+        if (ImGui::MenuItem("volume"))
         {
             controller->addNode("volume");
         }
 
-        if (ImGui::MenuItem("sine"))
+        if (ImGui::MenuItem("source"))
         {
-            std::cout << "sine" << std::endl;
+            controller->addNode("source");
         }
 
-        if (ImGui::MenuItem("time"))
+        if (ImGui::MenuItem("sink"))
         {
-            std::cout << "time"  << std::endl;
+            controller->addNode("sink");
         }
 
         ImGui::EndPopup();

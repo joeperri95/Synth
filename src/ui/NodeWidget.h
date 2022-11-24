@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include "../../external/imnodes/imnodes.h"
 
@@ -11,7 +12,7 @@ public:
     virtual ~NodeWidget() = 0;
 
     virtual void render() = 0;
-    virtual void onSelected() {};
+    virtual void onSelected();
 
 protected:
     int id;
@@ -20,5 +21,6 @@ protected:
 
 inline NodeWidget::NodeWidget() {}
 inline NodeWidget::~NodeWidget() {}
+inline void NodeWidget::onSelected() {std::cout << "(" << this->id << ") got clicked" << std::endl;}
 
 }

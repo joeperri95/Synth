@@ -11,7 +11,6 @@ public:
     ~VolumeNodeWidget();
 
     void render() override;
-    void onSelected() override;
 
 protected:
     int input;

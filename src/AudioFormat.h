@@ -1,4 +1,5 @@
 #pragma once
+#include <ostream>
 
 namespace audio {
 
@@ -32,6 +33,15 @@ struct AudioFormat
     int getFramesPerBuffer(){
         return this->bufferSize;
     }
+
+    friend std::ostream& operator<<(std::ostream& out, AudioFormat& audio) {
+        out << "Channels: " << audio.channels << std::endl;
+        out << "Sample Rate: " << audio.sampleRate << std::endl;
+        out << "Bit Depth: " << audio.bitDepth << std::endl;
+        out << "Buffer Size: " << audio.bufferSize << std::endl;
+        return out;
+    }
+
 };
 
 } // namespace audio
