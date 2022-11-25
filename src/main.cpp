@@ -56,12 +56,8 @@ int main(int argc, char *argv[])
     AudioQueue<sample_type> display;
     display.setFormat({CHANNELS, SAMPLE_RATE,BIT_DEPTH, BUFF_SIZE});
 
-    std::shared_ptr<EffectController> controller= std::make_shared<EffectController>();
-    std::shared_ptr<float> volume = std::make_shared<float>(0.5);
-
     ui::GUI g;
-    std::shared_ptr<ui::VolumeWidget> v = make_shared<ui::VolumeWidget>(volume);
-    g.initialize(controller, &display, v);
+    g.initialize();
 
     while(!g.shouldQuit) {
         g.handle_event();

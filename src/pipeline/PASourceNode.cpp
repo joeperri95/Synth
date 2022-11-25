@@ -52,8 +52,10 @@ PASourceNode::PASourceNode(NodeID node, AttrID outputID) {
 
 PASourceNode::~PASourceNode() {}
 
-void PASourceNode::update() {
-    this->queue->setQueue(this->outputs[this->outputID]);
+void PASourceNode::update() {}
+
+void PASourceNode::onInputChanged(AttrID attr) {
+    this->queue->setQueue(this->outputs[attr]);
 }
 
 }

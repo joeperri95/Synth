@@ -33,7 +33,7 @@ public:
     GUI();
     ~GUI();
 
-    void initialize(std::shared_ptr<EffectController> controller, audio::AudioQueue<sample_type> *queue, std::shared_ptr<ui::VolumeWidget> v);
+    void initialize();
     void shut_down();
     void handle_event();
     void render();
@@ -49,9 +49,6 @@ private:
     int width;
 
     // to deprecate
-    std::shared_ptr<EffectController> controller;
-    audio::AudioQueue<sample_type> *queue;
-    std::shared_ptr<ui::VolumeWidget> v;
     NodeEditorWidget nodes;
 
     // new

@@ -24,8 +24,13 @@ int play_callback(
     {
         for (int j = 0; j < format.channels; j++)
         {
-            sample_type sample = queue->pop();
-            *(output + i * format.channels + j) = 0.5 * sample;
+            if (queue->empty()) {
+                sample_type sample = 0;
+                *(output + i * format.channels + j) = 0.5 * sample;
+            } else {
+                sample_type sample = queue->pop();
+                *(output + i * format.channels + j) = 0.5 * sample;
+            }
         }
     }
 
@@ -52,8 +57,10 @@ PASinkNode::PASinkNode(NodeID node, AttrID inputID) {
 
 PASinkNode::~PASinkNode() {}
 
-void PASinkNode::update() {
-    this->queue->setQueue(this->inputs[this->inputID]);
+void PASinkNode::update() {}
+
+void PASinkNode::onInputChanged(AttrID attr) {
+    this->queue->setQueue(this->inputs[attr]);
 }
      
 }

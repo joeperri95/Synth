@@ -16,7 +16,7 @@ class Node {
 public:
     Node();
     virtual ~Node() = 0;
-    virtual void update() = 0;
+    virtual void onInputChanged(AttrID attr) = 0;
 
     std::vector<LinkID> getInputs();
     std::vector<LinkID> getOutputs();

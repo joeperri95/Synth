@@ -23,17 +23,14 @@ void GUI::shut_down() {
     SDL_DestroyWindow(window.get());
     SDL_Quit();
 }
-void GUI::initialize(std::shared_ptr<EffectController> controller, audio::AudioQueue<sample_type> *queue, std::shared_ptr<ui::VolumeWidget> v) {
+void GUI::initialize() {
     SDL_Init(SDL_INIT_VIDEO);
     window = std::unique_ptr<SDL_Window, sdl_deleter>(SDL_CreateWindow(this->title.c_str(), 
                                                                             SDL_WINDOWPOS_CENTERED, 
                                                                             SDL_WINDOWPOS_CENTERED,
                                                                             this->height, this->width, 
                                                                             SDL_WINDOW_SHOWN));
-    this->controller = controller;
-    this->queue = queue;
 
-    this->v = v;
     renderer = std::unique_ptr<SDL_Renderer, sdl_deleter>(SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED));
     IMGUI_CHECKVERSION();
 
@@ -64,7 +61,7 @@ void GUI::render() {
 
     ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.40f, 1.00f);
 
-    v->render();
+/*
     {
         static float f = 0.0f;
         bool b = false;
@@ -213,7 +210,7 @@ void GUI::render() {
         }
         ImGui::End();
     }  
-
+*/
     nodes.render();
 
     // Rendering

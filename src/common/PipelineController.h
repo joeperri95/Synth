@@ -13,6 +13,7 @@
 #include "ui/NodeWidgetFactory.h"
 
 using pipeline::LinkID;
+using pipeline::AttrID;
 using pipeline::NodeID;
 
 class PipelineController {
@@ -38,10 +39,14 @@ class PipelineController {
     pipeline::Pipeline pipeline;
 
     // ImNode section
-    std::map<LinkID, std::pair<int, int>> links;
+    std::map<LinkID, std::pair<AttrID, AttrID>> links;
     std::map<NodeID, std::shared_ptr<ui::NodeWidget>> nodes;
     std::set<NodeID> selectedNodes;
 
+    // Control widget section
+
+
+    // Common
     LinkID nextLinkID;
     NodeID nextNodeID;
 

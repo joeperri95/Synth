@@ -29,7 +29,7 @@ void Node::setInput(AttrID attr, std::shared_ptr<LockingSPSCRingBuffer<sample_ty
         } else {
             this->inputs[attr] = input;
         }
-        this->update();
+        this->onInputChanged(attr);
     } else {
         std::cerr << "Attr " << attr << " not in input map!" << std::endl;
     }
@@ -42,7 +42,7 @@ void Node::setOutput(AttrID attr, std::shared_ptr<LockingSPSCRingBuffer<sample_t
         } else {
             this->outputs[attr] = output;
         }
-        this->update();
+        this->onInputChanged(attr);
     } else {
         std::cerr << "Attr " << attr << " not in output map!" << std::endl;
     }
