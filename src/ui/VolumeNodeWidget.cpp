@@ -12,6 +12,9 @@ VolumeNodeWidget::~VolumeNodeWidget() {}
 
 void VolumeNodeWidget::render() {
     ImNodes::BeginNode(this->id);
+    ImNodes::BeginNodeTitleBar();
+    ImGui::TextUnformatted("volume");
+    ImNodes::EndNodeTitleBar();
     ImNodes::PushAttributeFlag(ImNodesAttributeFlags_EnableLinkDetachWithDragClick);
     ImNodes::BeginInputAttribute(input);
     ImGui::Text("input pin");

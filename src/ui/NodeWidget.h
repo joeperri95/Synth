@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <iostream>
+#include <string>
+#include "spdlog/spdlog.h"
 
 #include "../../external/imnodes/imnodes.h"
 
@@ -13,14 +14,17 @@ public:
 
     virtual void render() = 0;
     virtual void onSelected();
+    void setTitle(std::string title);
 
 protected:
     int id;
     bool selected;
+    std::string title;
 };
 
 inline NodeWidget::NodeWidget() {}
 inline NodeWidget::~NodeWidget() {}
-inline void NodeWidget::onSelected() {std::cout << "(" << this->id << ") got clicked" << std::endl;}
+inline void NodeWidget::onSelected() {spdlog::info("Node {} got clicked", id);}
+inline void NodeWidget::setTitle(std::string title) {this->title = title;}
 
 }

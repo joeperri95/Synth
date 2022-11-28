@@ -8,8 +8,12 @@
 
 #include "pipeline/Pipeline.h"
 #include "pipeline/Node.h"
-#include "ui/NodeWidget.h"
+#include "pipeline/NodeFactory.h"
 
+#include "ui/NodeWidget.h"
+#include "ui/ControlWidget.h"
+
+#include "ui/ControlWidgetFactory.h"
 #include "ui/NodeWidgetFactory.h"
 
 using pipeline::LinkID;
@@ -31,6 +35,7 @@ class PipelineController {
 
     std::map<LinkID, std::pair<int, int>> getLinks();
     std::vector<std::shared_ptr<ui::NodeWidget>> getNodes();
+    std::vector<std::shared_ptr<ui::ControlWidget>> getWidgets();
 
   private:
     std::mutex mutex;
@@ -44,12 +49,15 @@ class PipelineController {
     std::set<NodeID> selectedNodes;
 
     // Control widget section
+    std::map<NodeID, std::shared_ptr<ui::ControlWidget>> widgets;
 
 
     // Common
     LinkID nextLinkID;
     NodeID nextNodeID;
 
-    ui::NodeWidgetFactory factory; 
+    ui::ControlWidgetFactory controlFactory; 
+    ui::NodeWidgetFactory nodeWidgetFactory; 
+    pipeline::NodeFactory nodeFactory;
 
 };

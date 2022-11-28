@@ -2,8 +2,11 @@
 
 using pipeline::LinkID;
 using pipeline::NodeID;
+using pipeline::Node;
+using ui::NodeWidget;
+using ui::ControlWidget;
 
-PipelineController::PipelineController() : mutex(), pipeline(), links(), nodes(), selectedNodes(), nextLinkID(1), nextNodeID(1), factory(){
+PipelineController::PipelineController() : mutex(), pipeline(), links(), nodes(), selectedNodes(), nextLinkID(1), nextNodeID(1), controlFactory(), nodeWidgetFactory(), nodeFactory(){
 }
 
 PipelineController::~PipelineController() {
@@ -13,8 +16,23 @@ PipelineController::~PipelineController() {
 NodeID PipelineController::addNode(std::string recipe) {
     std::lock_guard lock(this->mutex);
     int ret = nextNodeID++;
-    this->pipeline.addNode(ret, recipe);
-    this->nodes.insert(std::make_pair(ret, factory.create(ret, recipe)));
+
+    std::unique_ptr<Node> pnode = nodeFactory.createNode(ret, recipe);
+    if (pnode != nullptr){
+        this->pipeline.addNode(ret, std::move(pnode));
+    }
+
+    std::shared_ptr<NodeWidget> node = nodeWidgetFactory.create(ret, recipe);
+    if (node != nullptr) {
+        this->nodes[ret] = node;
+    }
+
+    std::shared_ptr<ControlWidget> widget = controlFactory.create(ret, recipe);
+    if (widget != nullptr) {
+        this->widgets[ret] = widget;
+    }
+
+
     return ret;
 }
 
@@ -42,7 +60,7 @@ void PipelineController::selectNodes(std::vector<NodeID> nodes) {
 LinkID PipelineController::addLink(int start, int end) {
     std::lock_guard lock(this->mutex);
     int ret = nextLinkID++;
-    std::cout << "created link: " << ret << " start: " << start << " end: " << end << std::endl;
+    spdlog::debug("PipelineController::addLink: created link: {} start: {} end: {}", ret, start, end);
     this->links[ret] = std::make_pair(start, end);
     this->pipeline.linkNodes(ret, start, end);
 
@@ -64,6 +82,15 @@ std::vector<std::shared_ptr<ui::NodeWidget>> PipelineController::getNodes() {
     std::lock_guard lock(this->mutex);
     std::vector<std::shared_ptr<ui::NodeWidget>> ret;
     for (const auto & [key, value]: this->nodes) {
+        ret.push_back(value);
+    }
+    return ret;
+}
+
+std::vector<std::shared_ptr<ui::ControlWidget>> PipelineController::getWidgets() {
+    std::lock_guard lock(this->mutex);
+    std::vector<std::shared_ptr<ui::ControlWidget>> ret;
+    for (const auto & [key, value]: this->widgets) {
         ret.push_back(value);
     }
     return ret;

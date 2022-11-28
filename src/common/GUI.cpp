@@ -7,6 +7,8 @@ GUI::GUI() {
     height = 800;
     width = 600;
     shouldQuit = false;
+    this->controller = std::make_shared<PipelineController>();
+    this->nodes = std::make_unique<NodeEditorWidget>(this->controller);
 }
 
 GUI::~GUI() {
@@ -211,7 +213,11 @@ void GUI::render() {
         ImGui::End();
     }  
 */
-    nodes.render();
+    nodes->render();
+
+    for (auto it: this->controller->getWidgets()) {
+        it->render();
+    }
 
     // Rendering
     ImGui::Render();

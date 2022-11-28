@@ -6,10 +6,9 @@
 
 namespace ui {
 
-NodeEditorWidget::NodeEditorWidget() {
-    this->controller = std::make_shared<PipelineController>();
+NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controller) {
+    this->controller = controller;
 }
-
 
 NodeEditorWidget::~NodeEditorWidget() {}
 
@@ -49,6 +48,11 @@ void NodeEditorWidget::render() {
         if (ImGui::MenuItem("source"))
         {
             controller->addNode("source");
+        }
+
+        if (ImGui::MenuItem("sine"))
+        {
+            controller->addNode("sine");
         }
 
         if (ImGui::MenuItem("sink"))

@@ -35,20 +35,30 @@ public:
     }
 
     bool empty() {
+        std::lock_guard<std::mutex> lock(this->_mutex);
         if (this->_queue.get() == nullptr) {
             return true;
         }
         return this->_queue->empty();
     }
 
+    bool full() {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        if (this->_queue.get() == nullptr) {
+            return true;
+        }
+        return this->_queue->full();
+    }
+
     void push(T t) {
+        std::lock_guard<std::mutex> lock(this->_mutex);
         if (this->_queue.get() != nullptr) {
-        // std::cout << "AudioQueue: push" << std::endl;
             this->_queue->push(t);
         }
     }
 
     T pop() {
+        std::lock_guard<std::mutex> lock(this->_mutex);
         if (this->_queue.get() == nullptr) {
             return 0;
         }

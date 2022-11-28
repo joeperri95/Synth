@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION "3.16")
 find_package(SDL2 REQUIRED)
 find_package(imgui REQUIRED)
 find_package(implot REQUIRED)
+find_package(spdlog REQUIRED)
 
 set(Sources
     main.cpp
@@ -14,16 +15,17 @@ set(Sources
     ../external/imnodes/imnodes.h
     ../external/imnodes/imnodes.cpp
     ../external/imnodes/imnodes_internal.h
-    effects/Volume.cpp
-    ui/VolumeWidget.cpp
     ui/NodeEditorWidget.cpp
     ui/NodeWidgetFactory.cpp
+    ui/ControlWidgetFactory.cpp
+    ui/VolumeWidget.cpp
     ui/VolumeNodeWidget.cpp
     ui/SinkNodeWidget.cpp
     ui/SourceNodeWidget.cpp
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
     pipeline/VolumeNode.cpp
+    pipeline/SineSourceNode.cpp
     pipeline/PASinkNode.cpp
     pipeline/PASourceNode.cpp
     pipeline/Node.cpp
@@ -55,4 +57,5 @@ target_link_libraries(synth -lm -lportaudio -lasound -lpthread
                         SDL2::SDL2 
                         imgui::imgui
                         implot::implot
+                        spdlog::spdlog
                         )

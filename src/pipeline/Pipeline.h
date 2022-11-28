@@ -15,7 +15,8 @@ class Pipeline {
 public:
     Pipeline();
     ~Pipeline();
-    void addNode(NodeID id, std::string recipe);
+    void addNode(NodeID id, std::string recipe); // deprecate
+    void addNode(NodeID id, std::unique_ptr<Node> node);
     void removeNode(NodeID id);
     void linkNodes(LinkID id, AttrID l1, AttrID l2);
     void removeLink(LinkID id);

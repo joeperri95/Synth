@@ -14,11 +14,7 @@
 #include <thread>
 #include <chrono>
 
-#include "ui/VolumeWidget.h"
-#include "effects/Volume.h"
-#include "effects/Effect.h"
-
-#include <portaudio.h>
+#include "spdlog/spdlog.h"
 #include "common/GUI.h"
 #include "wav.h"
 #include "effectController.h"
@@ -32,27 +28,13 @@ using audio::AudioBuffer;
 using audio::AudioFormat;
 using audio::AudioQueue;
 
-int play_callback(
-    const void *inputBuffer, void *outputBuffer,
-    unsigned long bufferSize,
-    const PaStreamCallbackTimeInfo *timeInfo,
-    PaStreamCallbackFlags statusFlags,
-    void *userData);
-
-int record_callback(
-    const void *inputBuffer, void *outputBuffer,
-    unsigned long bufferSize,
-    const PaStreamCallbackTimeInfo *timeInfo,
-    PaStreamCallbackFlags statusFlags,
-    void *userData);
-
 void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, std::shared_ptr<EffectController>, std::shared_ptr<float> f); 
-void splitter(AudioQueue<sample_type> *input, AudioQueue<sample_type> *output1, AudioQueue<sample_type> *output2);
 
 int main(int argc, char *argv[])
 {
-    AudioFormat format(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
+    spdlog::set_level(spdlog::level::debug);
 
+    AudioFormat format(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
     AudioQueue<sample_type> display;
     display.setFormat({CHANNELS, SAMPLE_RATE,BIT_DEPTH, BUFF_SIZE});
 
@@ -70,20 +52,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void splitter(AudioQueue<sample_type> *input, AudioQueue<sample_type> *output1, AudioQueue<sample_type> *output2)
-{    
-    while(1) {
-        if(!input->empty()) {
-            sample_type sample = input->pop();
-            output1->push(sample);
-            output2->push(sample);
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
-}
-
 void effect_thread(AudioQueue<sample_type> *in, AudioQueue<sample_type> *out, std::shared_ptr<EffectController> controller, std::shared_ptr<float> f) {
-    audio::effects::Volume vol(f);
 
     while (1) {
         if (!in->empty()) {

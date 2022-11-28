@@ -10,27 +10,20 @@
 #include "common/PipelineController.h"
 
 namespace ui {
-class NodeEditorWidget : ControlWidget {
+class NodeEditorWidget {
 public:
-    NodeEditorWidget();
+    NodeEditorWidget(std::shared_ptr<PipelineController> controller);
     ~NodeEditorWidget();
 
-    void render() override;
+    void render();
 
 protected:
-    // Should have this
+    std::string _name;
+    int _id;
     // PipelineController controller
     // contains nodes and links
     // communicates to audio pipeline
     std::shared_ptr<PipelineController> controller;
-
-    // Should not have these
-    std::map<int, std::pair<int, int>> links;
-    std::map<int, std::unique_ptr<NodeWidget>> nodes;
-
-    int nextID;
-    int nextNodeID;
-    int nextLinkID;
 
 };
 }

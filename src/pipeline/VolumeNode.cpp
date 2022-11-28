@@ -35,7 +35,9 @@ void VolumeNode::update(VolumeNode *self) {
     while(!self->done) {
         if(!self->input->empty()) {
             sample_type sample = self->input->pop();
-            self->output->push(sample * self->volume);
+            if(!self->output->full()) {
+                self->output->push(sample * self->volume);
+            }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(1000.0f / self->format.sampleRate)));
     }

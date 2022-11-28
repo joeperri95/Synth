@@ -6,7 +6,7 @@ AudioDevice &AudioDevice::instance() {
     return instance_;
 }
 
-AudioDevice::AudioDevice() :  nextStreamID(0), _mutex(), state(AudioDeviceState::IDLE), streams() {
+AudioDevice::AudioDevice() : streams(), _mutex(), state(AudioDeviceState::IDLE), nextStreamID(0) {
 }
 
 AudioDevice::~AudioDevice(){

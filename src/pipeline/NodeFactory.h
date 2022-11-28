@@ -4,6 +4,7 @@
 
 #include <string>
 #include <memory>
+#include "spdlog/spdlog.h"
 
 namespace pipeline {
 

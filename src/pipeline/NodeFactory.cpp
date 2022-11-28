@@ -2,6 +2,7 @@
 #include "VolumeNode.h"
 #include "PASourceNode.h"
 #include "PASinkNode.h"
+#include "SineSourceNode.h"
 
 #include <iostream>
 #include <memory>
@@ -16,19 +17,20 @@ std::unique_ptr<Node> NodeFactory::createNode(NodeID id, std::string recipe) {
         std::unique_ptr<Node> ret = std::unique_ptr<Node>(new VolumeNode(id, nextAttrID, nextAttrID + 1));
         nextAttrID += 2;
         return ret;
-    }
-    else if (recipe.compare("source") == 0) {
+    } else if (recipe.compare("source") == 0) {
         std::unique_ptr<Node> ret = std::unique_ptr<Node>(new PASourceNode(id, nextAttrID));
         nextAttrID += 1;
         return ret;
-    }
-    else if (recipe.compare("sink") == 0) {
+    } else if (recipe.compare("sine") == 0) {
+        std::unique_ptr<Node> ret = std::unique_ptr<Node>(new SineSourceNode(id, nextAttrID));
+        nextAttrID += 1;
+        return ret;
+    } else if (recipe.compare("sink") == 0) {
         std::unique_ptr<Node> ret = std::unique_ptr<Node>(new PASinkNode(id, nextAttrID));
         nextAttrID += 1;
         return ret;
-    }
-    else {
-        std::cout << "Recipe not found" << std::endl;
+    } else {
+        spdlog::warn("Recipe not found");
         return nullptr;
     }
 }

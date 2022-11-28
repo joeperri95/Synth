@@ -13,6 +13,7 @@
 #include "sample_type.h"
 #include "effectController.h"
 #include "AudioQueue.h"
+#include "PipelineController.h"
 #include "ui/ControlWidget.h"
 #include "ui/VolumeWidget.h"
 #include "ui/VolumeNodeWidget.h"
@@ -48,11 +49,11 @@ private:
     int height;
     int width;
 
-    // to deprecate
-    NodeEditorWidget nodes;
+    std::unique_ptr<NodeEditorWidget> nodes;
 
     // new
     std::vector<std::unique_ptr<ControlWidget>> widgets;
+    std::shared_ptr<PipelineController> controller;
 };
     
 }

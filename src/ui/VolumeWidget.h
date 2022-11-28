@@ -1,17 +1,25 @@
 #pragma once
 
 #include "ControlWidget.h"
+#include <map>
+#include <functional>
 
 namespace ui {
 
-class VolumeWidget : ControlWidget {
+class VolumeWidget : public ControlWidget {
 public:
-    VolumeWidget(std::shared_ptr<float> state);
+    VolumeWidget(int id, float volume);
     ~VolumeWidget();
-    void render();
+    void render() override;
+
+    void notify();
+    int addSubscriber(std::function<void()> func);
+    void removeSubscriber(int id); 
 
 protected:
-    std::shared_ptr<float> _state;
+    float volume;
+    int nextSubscriberID;
+    std::map<int, std::function<void()>> subscribers;
 
 };
 
