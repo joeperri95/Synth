@@ -8,6 +8,7 @@
 #include "common/RingBuffer.h"
 #include "AudioFormat.h"
 #include "AudioQueue.h"
+#include "AudioParameter.h"
 
 namespace pipeline {
 
@@ -17,6 +18,7 @@ public:
     ~VolumeNode();
     static void update(VolumeNode *self);
     void onInputChanged(AttrID attr) override;
+    void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
      
 private:
     AttrID inputID;

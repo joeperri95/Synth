@@ -31,15 +31,21 @@ void VolumeWidget::render() {
 
 void VolumeWidget::notify() {
     spdlog::debug("VolumeWidget::notify");
+    AudioParameterMap args;
+    AudioParameter volume;
+    volume.setParamFloat(this->volume);
+    args["volume"] = volume;
     for(const auto& it : this->subscribers) {
-        it.second();
+        it.second(this->nodeArgs[it.first], args, this->args[it.first]);
     }
 }
 
-int VolumeWidget::addSubscriber(std::function<void()> func) {
+int VolumeWidget::addSubscriber(int nodeid, AudioParameterCallback func, void * arg) {
     spdlog::debug("VolumeWidget::addSubscriber");
     int ret = nextSubscriberID++;
     this->subscribers[ret] = func; 
+    this->args[ret] = arg; 
+    this->nodeArgs[ret] = nodeid; 
     return ret;
 }
 

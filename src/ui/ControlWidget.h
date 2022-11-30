@@ -4,8 +4,14 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <map>
+
 
 #include "imgui.h"
+#include "AudioParameter.h"
+
+using AudioParameterMap = std::map<std::string, AudioParameter>;
+using AudioParameterCallback = std::function<void(int, AudioParameterMap, void*)>;
 
 namespace ui {
 
@@ -16,7 +22,7 @@ public:
 
     virtual void render() = 0;
     virtual void notify() = 0;
-    virtual int addSubscriber(std::function<void()> func) = 0;
+    virtual int addSubscriber(int nodeid, AudioParameterCallback func, void *arg) = 0;
     virtual void removeSubscriber(int id) = 0; 
 
 

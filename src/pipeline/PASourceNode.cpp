@@ -32,6 +32,7 @@ int record_callback(
     return paContinue;
 }
 
+void PASourceNode::onStateChanged(std::map<std::string, AudioParameter> /*newState*/, void */*args*/) {}
 PASourceNode::PASourceNode(NodeID node, AttrID outputID) {
     this->_id = node;
     this->numInputs = 0;

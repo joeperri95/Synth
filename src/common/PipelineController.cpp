@@ -13,13 +13,24 @@ PipelineController::~PipelineController() {
 
 }
 
+void PipelineController::notified(NodeID id, AudioParameterMap params, void *arg) {
+    PipelineController *self = (PipelineController *) arg;
+    spdlog::info("ok got here now dispatch params to pipeline");
+    self->notify(id, params);
+}
+
+void PipelineController::notify(NodeID id, AudioParameterMap params) {
+    this->nodeList[id]->onStateChanged(params, nullptr);
+}
+
 NodeID PipelineController::addNode(std::string recipe) {
     std::lock_guard lock(this->mutex);
     int ret = nextNodeID++;
 
-    std::unique_ptr<Node> pnode = nodeFactory.createNode(ret, recipe);
+    std::shared_ptr<Node> pnode = nodeFactory.createNode(ret, recipe);
     if (pnode != nullptr){
-        this->pipeline.addNode(ret, std::move(pnode));
+        this->nodeList[ret] = pnode;
+        this->pipeline.addNode(ret, pnode);
     }
 
     std::shared_ptr<NodeWidget> node = nodeWidgetFactory.create(ret, recipe);
@@ -30,6 +41,7 @@ NodeID PipelineController::addNode(std::string recipe) {
     std::shared_ptr<ControlWidget> widget = controlFactory.create(ret, recipe);
     if (widget != nullptr) {
         this->widgets[ret] = widget;
+        this->widgets[ret]->addSubscriber(ret, PipelineController::notified, this);
     }
 
 

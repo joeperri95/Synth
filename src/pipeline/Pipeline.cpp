@@ -23,7 +23,7 @@ void Pipeline::addNode(NodeID id, std::string recipe) {
     }
 }
 
-void Pipeline::addNode(NodeID id, std::unique_ptr<Node> node) {
+void Pipeline::addNode(NodeID id, std::shared_ptr<Node> node) {
     spdlog::debug("Pipeline::addNode: NodeID: {}", id);
     this->nodes[id] = std::move(node);
     for (auto it : this->nodes[id]->getInputs()) {

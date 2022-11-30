@@ -16,14 +16,14 @@ public:
     Pipeline();
     ~Pipeline();
     void addNode(NodeID id, std::string recipe); // deprecate
-    void addNode(NodeID id, std::unique_ptr<Node> node);
+    void addNode(NodeID id, std::shared_ptr<Node> node);
     void removeNode(NodeID id);
     void linkNodes(LinkID id, AttrID l1, AttrID l2);
     void removeLink(LinkID id);
 
 private:
     NodeFactory factory;
-    std::map<NodeID, std::unique_ptr<Node>> nodes;
+    std::map<NodeID, std::shared_ptr<Node>> nodes;
     std::map<LinkID, std::pair<AttrID, AttrID>> links;
     std::map<AttrID, NodeID> attributes;
     std::map<LinkID, std::shared_ptr<LockingSPSCRingBuffer<sample_type>>> buffers;

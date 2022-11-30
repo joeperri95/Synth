@@ -5,7 +5,7 @@
 #include <memory>
 #include <set>
 #include <mutex>
-
+#include "spdlog/spdlog.h"
 #include "pipeline/Pipeline.h"
 #include "pipeline/Node.h"
 #include "pipeline/NodeFactory.h"
@@ -37,11 +37,16 @@ class PipelineController {
     std::vector<std::shared_ptr<ui::NodeWidget>> getNodes();
     std::vector<std::shared_ptr<ui::ControlWidget>> getWidgets();
 
+    // broker params to node
+    static void notified(NodeID id, AudioParameterMap params, void *arg);
+    void notify(NodeID id, AudioParameterMap params);
+
   private:
     std::mutex mutex;
   
     // Pipeline section
     pipeline::Pipeline pipeline;
+    std::map<NodeID, std::shared_ptr<pipeline::Node>> nodeList;
 
     // ImNode section
     std::map<LinkID, std::pair<AttrID, AttrID>> links;

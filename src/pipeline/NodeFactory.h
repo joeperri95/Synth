@@ -13,7 +13,7 @@ public:
     NodeFactory();
     ~NodeFactory();
 
-    std::unique_ptr<Node> createNode(NodeID id, std::string recipe);
+    std::shared_ptr<Node> createNode(NodeID id, std::string recipe);
 private:
     int nextAttrID;
 

@@ -52,4 +52,19 @@ void VolumeNode::onInputChanged(AttrID attr) {
     }
 }
 
+void VolumeNode::onStateChanged(std::map<std::string, AudioParameter> newState, void */*arg*/) {
+    auto it = newState.find("volume");
+    if(it != newState.end()) {
+        AudioParameter param = newState["volume"];
+        if(param.getType() != AudioParameterType::TYPE_FLOAT) {
+            spdlog::warn("VolumeNode::onVolumeChange did not receive a float parameter");
+        } else {
+            spdlog::info("VolumeNode::onVolumeChange changing volume parameter");
+            this->volume = param.getParamFloat();
+        }
+    } else {
+        spdlog::warn("VolumeNode::onVolumeChange did not find volume parameter");
+    }
+}
+
 } // pipeline

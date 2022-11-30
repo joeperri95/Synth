@@ -16,6 +16,7 @@ public:
     PASourceNode(NodeID node, AttrID inputID);
     ~PASourceNode();
     void onInputChanged(AttrID attr);
+    void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
     void update();
      
 private:

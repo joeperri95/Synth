@@ -30,6 +30,7 @@ set(Sources
     pipeline/PASourceNode.cpp
     pipeline/Node.cpp
     common/AudioDevice.cpp
+    AudioParameter.cpp
     common/PipelineController.cpp
     common/LockingRingBuffer.h
     common/AttributeInfo.cpp

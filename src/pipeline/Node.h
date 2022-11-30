@@ -4,6 +4,8 @@
 #include <map>
 #include <cstdint>
 #include "common/LockingRingBuffer.h"
+#include "AudioParameter.h"
+#include "spdlog/spdlog.h"
 
 namespace pipeline {
 
@@ -17,6 +19,7 @@ public:
     Node();
     virtual ~Node() = 0;
     virtual void onInputChanged(AttrID attr) = 0;
+    virtual void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
 
     std::vector<LinkID> getInputs();
     std::vector<LinkID> getOutputs();

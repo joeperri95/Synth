@@ -37,6 +37,7 @@ int play_callback(
     return paContinue;
 }
 
+void PASinkNode::onStateChanged(std::map<std::string, AudioParameter> /*newState*/, void */*args*/) {}
 PASinkNode::PASinkNode(NodeID node, AttrID inputID) {
     this->_id = node;
     this->numInputs = 1;

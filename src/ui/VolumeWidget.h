@@ -13,13 +13,15 @@ public:
     void render() override;
 
     void notify();
-    int addSubscriber(std::function<void()> func);
+    int addSubscriber(int nodeid, AudioParameterCallback func, void * arg);
     void removeSubscriber(int id); 
 
 protected:
     float volume;
     int nextSubscriberID;
-    std::map<int, std::function<void()>> subscribers;
+    std::map<int, AudioParameterCallback> subscribers;
+    std::map<int, void *> args;
+    std::map<int, int> nodeArgs;
 
 };
 

@@ -16,6 +16,7 @@ public:
     PASinkNode(NodeID node, AttrID outputID);
     ~PASinkNode();
     void onInputChanged(AttrID attr);
+    void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
     void update();
      
 private:

@@ -22,6 +22,8 @@ std::vector<AttrID> Node::getOutputs() {
     return ret;
 }
 
+void Node::onStateChanged(std::map<std::string, AudioParameter> /*newState*/, void */*args*/) {}
+
 void Node::setInput(AttrID attr, std::shared_ptr<LockingSPSCRingBuffer<sample_type>> input) {
     if (this->inputs.find(attr) != this->inputs.end()) {
         if (this->inputs[attr]) {
