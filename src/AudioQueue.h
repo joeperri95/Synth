@@ -14,6 +14,11 @@ class AudioQueue {
 public:
     AudioQueue() : _mutex(), _queue(nullptr), _format() {}
 
+    bool isQueueValid() {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        return this->_queue != nullptr;
+    }
+
     void setQueue(std::shared_ptr<RingBuffer<T>> queue) {
         std::lock_guard<std::mutex> lock(this->_mutex);
         this->_queue = queue;
@@ -60,7 +65,7 @@ public:
     T pop() {
         std::lock_guard<std::mutex> lock(this->_mutex);
         if (this->_queue.get() == nullptr) {
-            return 0;
+            return T();
         }
         return this->_queue->pop();
     }

@@ -3,8 +3,7 @@
 #include <vector>
 #include <map>
 
-#include "ControlWidget.h"
-#include "../../external/imnodes/imnodes.h"
+#include "../../../external/imnodes/imnodes.h"
 #include "SDL_keycode.h"
 #include "NodeWidget.h"
 #include "common/PipelineController.h"

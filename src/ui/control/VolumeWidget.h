@@ -22,7 +22,8 @@ protected:
     std::map<int, AudioParameterCallback> subscribers;
     std::map<int, void *> args;
     std::map<int, int> nodeArgs;
-
+private:
+    static int count;
 };
 
 }

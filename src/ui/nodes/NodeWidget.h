@@ -4,7 +4,7 @@
 #include <string>
 #include "spdlog/spdlog.h"
 
-#include "../../external/imnodes/imnodes.h"
+#include "../../../external/imnodes/imnodes.h"
 
 namespace ui {
 class NodeWidget {

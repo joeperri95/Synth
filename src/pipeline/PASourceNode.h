@@ -7,7 +7,7 @@
 #include "AudioQueue.h"
 #include "common/AudioDevice.h"
 
-typedef short sample_type;
+typedef int16_t sample_type;
 
 namespace pipeline {
 

@@ -2,9 +2,9 @@
 #include <ostream>
 
 #define SAMPLE_RATE 44100
-#define CHANNELS 2
+#define CHANNELS 1
 #define BUFF_SIZE 4096 
-#define BIT_DEPTH 8 
+#define BIT_DEPTH 16 
 
 namespace audio {
 

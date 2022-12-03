@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "Node.h"
@@ -12,11 +13,11 @@
 
 namespace pipeline {
 
-class SineSourceNode : public Node {
+class SquareSourceNode : public Node {
 public:
-    SineSourceNode(NodeID id, AttrID outputID);
-    ~SineSourceNode();
-    static void update(SineSourceNode *self);
+    SquareSourceNode(NodeID id, AttrID outputID);
+    ~SquareSourceNode();
+    static void update(SquareSourceNode *self);
     void onInputChanged(AttrID attr) override;
     void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
      

@@ -3,9 +3,11 @@
 
 namespace ui {
 
+int VolumeWidget::count;
+
 VolumeWidget::VolumeWidget(int id, float volume) {
     this->volume = volume;
-    this->_name = "volume";
+    this->_name = "volume-" + std::to_string(++VolumeWidget::count);
     this->_id = id;
     this->nextSubscriberID = 1;
 }

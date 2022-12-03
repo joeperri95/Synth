@@ -10,11 +10,11 @@
 #include "pipeline/Node.h"
 #include "pipeline/NodeFactory.h"
 
-#include "ui/NodeWidget.h"
-#include "ui/ControlWidget.h"
+#include "ui/nodes/NodeWidget.h"
+#include "ui/nodes/NodeWidgetFactory.h"
 
-#include "ui/ControlWidgetFactory.h"
-#include "ui/NodeWidgetFactory.h"
+#include "ui/control/ControlWidget.h"
+#include "ui/control/ControlWidgetFactory.h"
 
 using pipeline::LinkID;
 using pipeline::AttrID;

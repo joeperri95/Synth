@@ -2,7 +2,6 @@
 
 #include "RingBuffer.h"
 #include <mutex>
-#include <iostream>
 
 template <Numeric T>
 class LockingSPSCRingBuffer : public RingBuffer<T> {
@@ -33,23 +32,17 @@ public:
     
     T pop() override {
         std::lock_guard<std::mutex> lock(_mutex);
+        
+        if (this->empty()) {
+            return T();
+        }
+
         T sample = _buffer[_head];
+        _full = false;
         _head = (_head + 1) % _capacity;
         
         return sample;
     };
-
-    T pop_or_zero() noexcept override{
-        std::lock_guard<std::mutex> lock(_mutex);
-        if (this->empty()) {
-            return 0;
-        } else {
-            T sample = _buffer[_head];
-            _head = (_head + 1) % _capacity;
-
-            return sample; 
-        }
-    }
 
     bool empty() const override {
         return !_full && (_head == _tail);
@@ -64,13 +57,13 @@ public:
 
         if(!_full)
         {
-            if(_head >= _tail)
+            if(_tail >= _head)
             {
-                size = _head - _tail;
+                size = _tail - _head;
             }
             else
             {
-                size = _capacity + _head - _tail;
+                size = _capacity + _tail - _head;
             }
         }
 

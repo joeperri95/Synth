@@ -14,10 +14,8 @@
 #include "effectController.h"
 #include "AudioQueue.h"
 #include "PipelineController.h"
-#include "ui/ControlWidget.h"
-#include "ui/VolumeWidget.h"
-#include "ui/VolumeNodeWidget.h"
-#include "ui/NodeEditorWidget.h"
+#include "ui/control/ControlWidget.h"
+#include "ui/nodes/NodeEditorWidget.h"
 
 struct sdl_deleter
 {

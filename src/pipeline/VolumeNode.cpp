@@ -32,23 +32,36 @@ VolumeNode::~VolumeNode(){
 }
 
 void VolumeNode::update(VolumeNode *self) {
+    int period_us = static_cast<int>(1000000.0f / (self->format.channels * self->format.sampleRate));
+
     while(!self->done) {
+        auto now = std::chrono::high_resolution_clock::now();
+        auto sleep = now + std::chrono::microseconds(period_us);
         if(!self->input->empty()) {
             sample_type sample = self->input->pop();
+
             if(!self->output->full()) {
                 self->output->push(sample * self->volume);
+            } else {
+                // spdlog::debug("VolumeNode::update output queue is full and isQueueValid == {}", self->output->isQueueValid());
             }
+        } else {
+            spdlog::debug("VolumeNode::update input queue is empty and isQueueValid == {}", self->input->isQueueValid());
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(1000.0f / self->format.sampleRate)));
+        std::this_thread::sleep_until(sleep);
     }
 } 
  
 void VolumeNode::onInputChanged(AttrID attr) {
+    spdlog::debug("VolumeNode::onInputChanged");
     if(this->outputs.find(attr) != this->outputs.end()) {
         this->output->setQueue(this->outputs[attr]);
     }
     else if(this->inputs.find(attr) != this->inputs.end()) {
         this->input->setQueue(this->inputs[attr]);
+    }
+    else {
+        spdlog::warn("Cannot find attr in inputs or outputs");
     }
 }
 
@@ -57,13 +70,13 @@ void VolumeNode::onStateChanged(std::map<std::string, AudioParameter> newState, 
     if(it != newState.end()) {
         AudioParameter param = newState["volume"];
         if(param.getType() != AudioParameterType::TYPE_FLOAT) {
-            spdlog::warn("VolumeNode::onVolumeChange did not receive a float parameter");
+            spdlog::warn("VolumeNode::onStateChange did not receive a float parameter");
         } else {
-            spdlog::info("VolumeNode::onVolumeChange changing volume parameter");
+            spdlog::info("VolumeNode::onStateChange changing volume parameter");
             this->volume = param.getParamFloat();
         }
     } else {
-        spdlog::warn("VolumeNode::onVolumeChange did not find volume parameter");
+        spdlog::warn("VolumeNode::onStateChange did not find volume parameter");
     }
 }
 

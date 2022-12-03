@@ -15,19 +15,23 @@ set(Sources
     ../external/imnodes/imnodes.h
     ../external/imnodes/imnodes.cpp
     ../external/imnodes/imnodes_internal.h
-    ui/NodeEditorWidget.cpp
-    ui/NodeWidgetFactory.cpp
-    ui/ControlWidgetFactory.cpp
-    ui/VolumeWidget.cpp
-    ui/VolumeNodeWidget.cpp
-    ui/SinkNodeWidget.cpp
-    ui/SourceNodeWidget.cpp
+    ui/nodes/NodeEditorWidget.cpp
+    ui/nodes/NodeWidgetFactory.cpp
+    ui/nodes/VolumeNodeWidget.cpp
+    ui/nodes/SinkNodeWidget.cpp
+    ui/nodes/SourceNodeWidget.cpp
+    ui/nodes/MixerNodeWidget.cpp
+    ui/control/ControlWidgetFactory.cpp
+    ui/control/VolumeWidget.cpp
+    ui/control/SineControlWidget.cpp
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
     pipeline/VolumeNode.cpp
     pipeline/SineSourceNode.cpp
+    pipeline/SquareSourceNode.cpp
     pipeline/PASinkNode.cpp
     pipeline/PASourceNode.cpp
+    pipeline/MixerNode.cpp
     pipeline/Node.cpp
     common/AudioDevice.cpp
     AudioParameter.cpp
@@ -41,8 +45,6 @@ set(Headers
     AudioFormat.h 
     AudioQueue.h
     common/GUI.h
-    effects.h
-    effects/Effect.h
 )
 
 include_directories(.)

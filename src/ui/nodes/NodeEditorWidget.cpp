@@ -8,6 +8,11 @@ namespace ui {
 
 NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controller) {
     this->controller = controller;
+    controller->addNode("sine");
+    controller->addNode("volume");
+    controller->addNode("sink");
+    controller->addLink(1, 2);
+    controller->addLink(3, 4);
 }
 
 NodeEditorWidget::~NodeEditorWidget() {}
@@ -60,6 +65,11 @@ void NodeEditorWidget::render() {
             controller->addNode("sink");
         }
 
+        if (ImGui::MenuItem("mixer"))
+        {
+            controller->addNode("mixer");
+        }
+
         ImGui::EndPopup();
     }
     ImGui::PopStyleVar();
@@ -72,7 +82,7 @@ void NodeEditorWidget::render() {
         ImNodes::Link(linkid, pair.first, pair.second);
     }
     
-
+    ImNodes::MiniMap();
     ImNodes::EndNodeEditor();
 
     // check for connections

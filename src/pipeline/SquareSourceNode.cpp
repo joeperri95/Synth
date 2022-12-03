@@ -1,8 +1,9 @@
-#include "SineSourceNode.h"
+
+#include "SquareSourceNode.h"
 
 namespace pipeline {
 
-SineSourceNode::SineSourceNode(NodeID id, AttrID outputID){
+SquareSourceNode::SquareSourceNode(NodeID id, AttrID outputID){
     this->_id = id;
     this->numInputs = 0;
     this->numOutputs = 1;
@@ -17,25 +18,26 @@ SineSourceNode::SineSourceNode(NodeID id, AttrID outputID){
     this->output->setFormat(format);
     this->output->setQueue(this->outputs[outputID]);
     
-    this->updateThread = std::thread(SineSourceNode::update, this); 
+    this->updateThread = std::thread(SquareSourceNode::update, this); 
 }
 
-SineSourceNode::~SineSourceNode(){
+SquareSourceNode::~SquareSourceNode(){
     this->done = true;
     this->updateThread.join();
 }
 
-void SineSourceNode::update(SineSourceNode *self) {
-    int period_us = static_cast<int>(1000000.0f / (self->format.channels * self->format.sampleRate));
-    //int period = static_cast<int>(1.0f / 1000000.0f);
-    double omegaNormalized = 2 * M_PI * self->frequency / self->format.sampleRate;
+void SquareSourceNode::update(SquareSourceNode *self) {
+
     int i = 0;
 
     while(!self->done) {
+        double omegaNormalized = 2 * M_PI * self->frequency / self->format.sampleRate;
+        int period_us = static_cast<int>(1000000.0f / (self->format.sampleRate * self->format.channels));
+
         auto now = std::chrono::high_resolution_clock::now();
         auto sleep = now + std::chrono::microseconds(period_us);
-        omegaNormalized = 2 * M_PI * self->frequency / self->format.sampleRate;
-        sample_type sample = static_cast<sample_type> (65535 / 2 * sin((i++) * omegaNormalized));
+
+        sample_type sample = static_cast<sample_type> (65535 / 2 * (sin(omegaNormalized * i++) > 0));
         for(int j = 0; j < self->format.channels; j++) {
             if (!self->output->full()) {
                 self->output->push(sample);
@@ -45,24 +47,24 @@ void SineSourceNode::update(SineSourceNode *self) {
     }
 } 
  
-void SineSourceNode::onInputChanged(AttrID attr) {
+void SquareSourceNode::onInputChanged(AttrID attr) {
     if(this->outputs.find(attr) != this->outputs.end()) {
         this->output->setQueue(this->outputs[attr]);
     }
 }
 
-void SineSourceNode::onStateChanged(std::map<std::string, AudioParameter> newState, void */*arg*/) {
+void SquareSourceNode::onStateChanged(std::map<std::string, AudioParameter> newState, void */*arg*/) {
     auto it = newState.find("frequency");
     if(it != newState.end()) {
         AudioParameter param = newState["frequency"];
         if(param.getType() != AudioParameterType::TYPE_FLOAT) {
-            spdlog::warn("SineSourceNode::onStateChange did not receive a float parameter");
+            spdlog::warn("SquareSourceNode::onStateChange did not receive a float parameter");
         } else {
-            spdlog::info("SineSourceNode::onStateChange changing frequency parameter");
+            spdlog::info("SquareSourceNode::onStateChange changing frequency parameter");
             this->frequency = param.getParamFloat();
         }
     } else {
-        spdlog::warn("SineSourceNode::onStateChange did not find volume parameter");
+        spdlog::warn("SquareSourceNode::onStateChange did not find volume parameter");
     }
 }
 

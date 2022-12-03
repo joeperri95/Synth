@@ -14,23 +14,24 @@ int play_callback(
 
     if (queue == nullptr) {
         return paContinue;
-    }
+    }  
 
     audio::AudioFormat format = queue->getFormat();
 
     sample_type *output = (sample_type *)outputBuffer;    
+    sample_type sample = 0;
 
     for (int i = 0; i < format.bufferSize; i++)
     {
+        if (queue->isQueueValid()) {
+            sample = queue->pop();
+        } else {
+            spdlog::debug("PASinkNode::play_callback queue is invalid");
+        }
+
         for (int j = 0; j < format.channels; j++)
         {
-            if (queue->empty()) {
-                sample_type sample = 0;
-                *(output + i * format.channels + j) = 0.5 * sample;
-            } else {
-                sample_type sample = queue->pop();
-                *(output + i * format.channels + j) = 0.5 * sample;
-            }
+            *(output + i * format.channels + j) = sample;
         }
     }
 
@@ -38,6 +39,7 @@ int play_callback(
 }
 
 void PASinkNode::onStateChanged(std::map<std::string, AudioParameter> /*newState*/, void */*args*/) {}
+
 PASinkNode::PASinkNode(NodeID node, AttrID inputID) {
     this->_id = node;
     this->numInputs = 1;
@@ -61,6 +63,7 @@ PASinkNode::~PASinkNode() {}
 void PASinkNode::update() {}
 
 void PASinkNode::onInputChanged(AttrID attr) {
+    spdlog::debug("PASinkNode::onInputChanged");
     this->queue->setQueue(this->inputs[attr]);
 }
      

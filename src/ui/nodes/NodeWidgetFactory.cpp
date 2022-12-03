@@ -2,6 +2,7 @@
 #include "VolumeNodeWidget.h"
 #include "SourceNodeWidget.h"
 #include "SinkNodeWidget.h"
+#include "MixerNodeWidget.h"
 
 namespace ui {
 
@@ -26,6 +27,10 @@ std::shared_ptr<NodeWidget> NodeWidgetFactory::create(int id, std::string s) {
     } else if (s.compare("sink") == 0) {
         std::shared_ptr<NodeWidget> ret = std::make_unique<SinkNodeWidget>(id, nextAttrID);
         nextAttrID += 1;
+        return ret;
+    } else if (s.compare("mixer") == 0) {
+        std::shared_ptr<NodeWidget> ret = std::make_unique<MixerNodeWidget>(id, nextAttrID, nextAttrID + 1, nextAttrID + 2);
+        nextAttrID += 3;
         return ret;
     }
     else {

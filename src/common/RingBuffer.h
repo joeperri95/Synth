@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "spdlog/spdlog.h"
 
 template <typename T>
 concept Numeric = requires(T param) {
@@ -22,10 +23,6 @@ public:
     
     // Remove the element at front of the queue and return it
     virtual T pop() = 0;
-
-    // If the queue is empty return 0
-    // Otherwise pop()
-    virtual T pop_or_zero() noexcept = 0;
 
     virtual bool empty() const = 0;
     virtual bool full() const = 0;
