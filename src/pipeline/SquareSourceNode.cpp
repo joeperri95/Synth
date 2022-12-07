@@ -10,7 +10,8 @@ SquareSourceNode::SquareSourceNode(NodeID id, AttrID outputID){
     this->outputID = outputID;
     this->outputs[outputID] = nullptr;
     this->frequency = 220.0f;
-    done = false;
+    this->done = false;
+    this->validQueue = false;
 
     this->format = audio::AudioFormat(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
 
@@ -29,27 +30,46 @@ SquareSourceNode::~SquareSourceNode(){
 void SquareSourceNode::update(SquareSourceNode *self) {
 
     int i = 0;
+    double index = 0;
 
     while(!self->done) {
         double omegaNormalized = 2 * M_PI * self->frequency / self->format.sampleRate;
-        int period_us = static_cast<int>(1000000.0f / (self->format.sampleRate * self->format.channels));
+        int period_us = static_cast<int>(1000000.0f * (self->format.bufferSize) / (self->format.sampleRate * self->format.channels));
 
         auto now = std::chrono::high_resolution_clock::now();
         auto sleep = now + std::chrono::microseconds(period_us);
 
-        sample_type sample = static_cast<sample_type> (65535 / 2 * (sin(omegaNormalized * i++) > 0));
-        for(int j = 0; j < self->format.channels; j++) {
-            if (!self->output->full()) {
-                self->output->push(sample);
+        for (int k = 0; k < self->format.bufferSize; k++) {
+            if (self->validQueue) {
+                index = (omegaNormalized * i++);
+                if(index >= (2 * M_PI)) {
+                    i = 0;
+                    index = 0;
+                }
+
+                sample_type sample = static_cast<sample_type> (65535 / 2 * (index > M_PI));
+                for(int j = 0; j < self->format.channels; j++) {
+                    if (!self->output->full()) {
+                        self->output->push(sample);
+                    }
+                }
+            } else {
+                index = 0;
+                i = 0;
             }
         }
         std::this_thread::sleep_until(sleep);
+        std::chrono::duration<double, std::milli> dur = std::chrono::high_resolution_clock::now() - now;
+        if (dur.count() > 43.0) {
+            spdlog::warn("Square source time taken {}", dur.count());
+        }
     }
 } 
  
 void SquareSourceNode::onInputChanged(AttrID attr) {
     if(this->outputs.find(attr) != this->outputs.end()) {
         this->output->setQueue(this->outputs[attr]);
+        this->validQueue = this->outputs[attr] != nullptr;
     }
 }
 

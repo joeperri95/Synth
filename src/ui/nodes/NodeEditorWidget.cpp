@@ -11,8 +11,8 @@ NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controlle
     controller->addNode("sine");
     controller->addNode("volume");
     controller->addNode("sink");
-    controller->addLink(1, 2);
-    controller->addLink(3, 4);
+    controller->addLink(1, 4);
+    //controller->addLink(3, 4);
 }
 
 NodeEditorWidget::~NodeEditorWidget() {}
@@ -63,6 +63,11 @@ void NodeEditorWidget::render() {
         if (ImGui::MenuItem("sink"))
         {
             controller->addNode("sink");
+        }
+
+        if (ImGui::MenuItem("wav"))
+        {
+            controller->addNode("wav");
         }
 
         if (ImGui::MenuItem("mixer"))

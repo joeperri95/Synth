@@ -1,34 +1,34 @@
-
 #pragma once
 
 #include "Node.h"
 #include <vector>
 #include <thread>
 #include <chrono>
+#include <memory>
 #include <map>
 #include "common/RingBuffer.h"
 #include "AudioFormat.h"
 #include "AudioQueue.h"
-#include <cmath>
+#include "AudioParameter.h"
 
 namespace pipeline {
 
-class SquareSourceNode : public Node {
+class FileSinkNode : public Node {
 public:
-    SquareSourceNode(NodeID id, AttrID outputID);
-    ~SquareSourceNode();
-    static void update(SquareSourceNode *self);
+    FileSinkNode(NodeID id, AttrID inputID);
+    ~FileSinkNode();
+    static void update(FileSinkNode *self);
     void onInputChanged(AttrID attr) override;
     void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
      
 private:
-    AttrID outputID;
-    std::shared_ptr<audio::AudioQueue<sample_type>> output;
+    AttrID inputID;
+    std::shared_ptr<audio::AudioQueue<sample_type>> queue;
     audio::AudioFormat format;
     bool done;
     bool validQueue;
-    float frequency;
     std::thread updateThread;
+
 };
 
 }

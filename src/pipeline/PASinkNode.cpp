@@ -23,14 +23,13 @@ int play_callback(
 
     for (int i = 0; i < format.bufferSize; i++)
     {
-        if (queue->isQueueValid()) {
-            sample = queue->pop();
-        } else {
-            spdlog::debug("PASinkNode::play_callback queue is invalid");
-        }
-
         for (int j = 0; j < format.channels; j++)
         {
+            if (queue->isQueueValid()) {
+                sample = queue->pop();
+            } else {
+                spdlog::debug("PASinkNode::play_callback queue is invalid");
+            }
             *(output + i * format.channels + j) = sample;
         }
     }

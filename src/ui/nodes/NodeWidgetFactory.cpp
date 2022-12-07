@@ -32,6 +32,10 @@ std::shared_ptr<NodeWidget> NodeWidgetFactory::create(int id, std::string s) {
         std::shared_ptr<NodeWidget> ret = std::make_unique<MixerNodeWidget>(id, nextAttrID, nextAttrID + 1, nextAttrID + 2);
         nextAttrID += 3;
         return ret;
+    } else if (s.compare("wav") == 0) {
+        std::shared_ptr<NodeWidget> ret = std::make_unique<SourceNodeWidget>(id, nextAttrID);
+        nextAttrID += 1;
+        return ret;
     }
     else {
         spdlog::warn("Recipe not found");

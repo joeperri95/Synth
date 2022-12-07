@@ -7,7 +7,7 @@
 #include <map>
 #include <memory>
 
-const int PIPELINE_CAPACITY = 44100;
+const int PIPELINE_CAPACITY = 16384;
 
 namespace pipeline {
 

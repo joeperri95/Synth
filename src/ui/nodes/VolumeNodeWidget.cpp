@@ -1,6 +1,5 @@
 #include "VolumeNodeWidget.h"
 
-
 namespace ui {
 
 VolumeNodeWidget::VolumeNodeWidget(int id, int input, int output) {

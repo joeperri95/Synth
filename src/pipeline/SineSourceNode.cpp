@@ -26,19 +26,20 @@ SineSourceNode::~SineSourceNode(){
 }
 
 void SineSourceNode::update(SineSourceNode *self) {
-    int period_us = static_cast<int>(1000000.0f / (self->format.channels * self->format.sampleRate));
-    //int period = static_cast<int>(1.0f / 1000000.0f);
+    int period_us = static_cast<int>(1000000.0f * (self->format.bufferSize) / (self->format.channels * self->format.sampleRate));
     double omegaNormalized = 2 * M_PI * self->frequency / self->format.sampleRate;
-    int i = 0;
+    long long i = 0;
 
     while(!self->done) {
         auto now = std::chrono::high_resolution_clock::now();
         auto sleep = now + std::chrono::microseconds(period_us);
         omegaNormalized = 2 * M_PI * self->frequency / self->format.sampleRate;
-        sample_type sample = static_cast<sample_type> (65535 / 2 * sin((i++) * omegaNormalized));
-        for(int j = 0; j < self->format.channels; j++) {
-            if (!self->output->full()) {
-                self->output->push(sample);
+        for (int j = 0; j < self->format.bufferSize; j++) {
+            sample_type sample = static_cast<sample_type> (65535 / 2 * sin((i++) * omegaNormalized));
+            for(int k = 0; k < self->format.channels; k++) {
+                if (!self->output->full()) {
+                    self->output->push(sample);
+                }
             }
         }
         std::this_thread::sleep_until(sleep);

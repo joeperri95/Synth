@@ -48,10 +48,19 @@ void GUI::initialize() {
 void GUI::handle_event() {
     while(SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
-        if (event.type == SDL_QUIT)
+        if (event.type == SDL_QUIT) {
             shouldQuit = true;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window.get()))
-            shouldQuit = true;
+        } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window.get())) {
+            shouldQuit = true; 
+        } else if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+                case SDLK_DELETE:
+                    spdlog::info("Delete key pressed");
+                break;
+                default:
+                break;
+            }
+        } 
     }
 }
 

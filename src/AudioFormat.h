@@ -1,8 +1,8 @@
 #pragma once
 #include <ostream>
 
-#define SAMPLE_RATE 44100
-#define CHANNELS 1
+#define SAMPLE_RATE 48000 
+#define CHANNELS 2
 #define BUFF_SIZE 4096 
 #define BIT_DEPTH 16 
 

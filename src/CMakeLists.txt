@@ -30,6 +30,8 @@ set(Sources
     pipeline/SineSourceNode.cpp
     pipeline/SquareSourceNode.cpp
     pipeline/PASinkNode.cpp
+    pipeline/FileSinkNode.cpp
+    pipeline/FileSourceNode.cpp
     pipeline/PASourceNode.cpp
     pipeline/MixerNode.cpp
     pipeline/Node.cpp

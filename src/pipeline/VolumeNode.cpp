@@ -32,21 +32,21 @@ VolumeNode::~VolumeNode(){
 }
 
 void VolumeNode::update(VolumeNode *self) {
-    int period_us = static_cast<int>(1000000.0f / (self->format.channels * self->format.sampleRate));
+    int period_us = static_cast<int>(1000000.0f * (self->format.bufferSize) / (self->format.channels * self->format.sampleRate));
 
     while(!self->done) {
         auto now = std::chrono::high_resolution_clock::now();
         auto sleep = now + std::chrono::microseconds(period_us);
-        if(!self->input->empty()) {
-            sample_type sample = self->input->pop();
+        for (int i = 0; i < self->format.bufferSize; i++) {
+            if(!self->input->empty()) {
+                sample_type sample = self->input->pop();
 
-            if(!self->output->full()) {
-                self->output->push(sample * self->volume);
+                if(!self->output->full()) {
+                    self->output->push(sample * self->volume);
+                } 
             } else {
-                // spdlog::debug("VolumeNode::update output queue is full and isQueueValid == {}", self->output->isQueueValid());
+                //spdlog::debug("VolumeNode::update input queue is empty and isQueueValid == {}", self->input->isQueueValid());
             }
-        } else {
-            spdlog::debug("VolumeNode::update input queue is empty and isQueueValid == {}", self->input->isQueueValid());
         }
         std::this_thread::sleep_until(sleep);
     }
