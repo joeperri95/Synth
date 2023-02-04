@@ -8,10 +8,13 @@ namespace ui {
 
 NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controller) {
     this->controller = controller;
-    controller->addNode("sine");
+    controller->addNode("wav");
+    controller->addNode("mixer");
     controller->addNode("volume");
     controller->addNode("sink");
-    controller->addLink(1, 4);
+    controller->addLink(1, 2);
+    controller->addLink(4, 5);
+    controller->addLink(6, 7);
     //controller->addLink(3, 4);
 }
 
