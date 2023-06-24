@@ -32,7 +32,7 @@ VolumeNode::~VolumeNode(){
 }
 
 void VolumeNode::update(VolumeNode *self) {
-    int period_us = static_cast<int>(1000000.0f * (self->format.bufferSize) / (self->format.channels * self->format.sampleRate));
+    int period_us = self->format.getPeriodMicroSeconds();
 
     while(!self->done) {
         auto now = std::chrono::high_resolution_clock::now();

@@ -8,14 +8,20 @@ namespace ui {
 
 NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controller) {
     this->controller = controller;
+    
+#define TESTING 
+#ifdef TESTING
+    // Create a default pipeline
     controller->addNode("wav");
-    controller->addNode("mixer");
+    controller->addNode("passthrough");
     controller->addNode("volume");
+    controller->addNode("tremolo");
     controller->addNode("sink");
     controller->addLink(1, 2);
-    controller->addLink(4, 5);
-    controller->addLink(6, 7);
-    //controller->addLink(3, 4);
+    controller->addLink(3, 4);
+    controller->addLink(5, 6);
+    controller->addLink(7, 8);
+#endif
 }
 
 NodeEditorWidget::~NodeEditorWidget() {}
@@ -48,33 +54,27 @@ void NodeEditorWidget::render() {
     // context menu items
     if (ImGui::BeginPopup("add node"))
     { 
-        if (ImGui::MenuItem("volume"))
-        {
+        if (ImGui::MenuItem("volume")) {
             controller->addNode("volume");
         }
 
-        if (ImGui::MenuItem("source"))
-        {
+        if (ImGui::MenuItem("source")) {
             controller->addNode("source");
         }
 
-        if (ImGui::MenuItem("sine"))
-        {
+        if (ImGui::MenuItem("sine")) {
             controller->addNode("sine");
         }
 
-        if (ImGui::MenuItem("sink"))
-        {
+        if (ImGui::MenuItem("sink")) {
             controller->addNode("sink");
         }
 
-        if (ImGui::MenuItem("wav"))
-        {
+        if (ImGui::MenuItem("wav")) {
             controller->addNode("wav");
         }
 
-        if (ImGui::MenuItem("mixer"))
-        {
+        if (ImGui::MenuItem("mixer")) {
             controller->addNode("mixer");
         }
 

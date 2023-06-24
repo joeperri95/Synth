@@ -20,9 +20,12 @@ set(Sources
     ui/nodes/VolumeNodeWidget.cpp
     ui/nodes/SinkNodeWidget.cpp
     ui/nodes/SourceNodeWidget.cpp
+    ui/nodes/PassthroughNodeWidget.cpp
     ui/nodes/MixerNodeWidget.cpp
+    ui/nodes/TremoloNodeWidget.cpp
     ui/control/ControlWidgetFactory.cpp
     ui/control/VolumeWidget.cpp
+    ui/control/TremoloWidget.cpp
     ui/control/SineControlWidget.cpp
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
@@ -34,6 +37,8 @@ set(Sources
     pipeline/FileSourceNode.cpp
     pipeline/PASourceNode.cpp
     pipeline/MixerNode.cpp
+    pipeline/PassthroughNode.cpp
+    pipeline/TremoloNode.cpp
     pipeline/Node.cpp
     common/AudioDevice.cpp
     AudioParameter.cpp

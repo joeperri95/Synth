@@ -42,6 +42,7 @@ void MixerNode::update(MixerNode *self) {
     sample_type sample;
 
     int period_us = static_cast<int>(1000000.0f * (self->format.bufferSize) / (self->format.channels * self->format.sampleRate));
+    period_us = self->format.getPeriodMicroSeconds();
 
     while(!self->done) {
 
@@ -49,24 +50,21 @@ void MixerNode::update(MixerNode *self) {
         auto sleep = now + std::chrono::microseconds(period_us);
 
         for(int i = 0; i < self->format.bufferSize; i++) {
-            for(int j = 0; j < self->format.channels; j++) {
-                if(!self->inputQueues[self->input1ID]->empty()) {
-                    sample1 = self->inputQueues[self->input1ID]->pop();
-                } else {
-                    sample1 = 0.0f;
-                }
-                if(!self->inputQueues[self->input2ID]->empty()) {
-                    // sample2 = self->inputQueues[self->input2ID]->pop();
-                    sample2 = 0.0f;
-                } else {
-                    sample2 = 0.0f;
-                }
+            if(!self->inputQueues[self->input1ID]->empty()) {
+                sample1 = self->inputQueues[self->input1ID]->pop();
+            } else {
+                sample1 = 0.0f;
+            }
+            if(!self->inputQueues[self->input2ID]->empty()) {
+                sample2 = self->inputQueues[self->input2ID]->pop();
+            } else {
+                sample2 = 0.0f;
+            }
 
-                sample = sample1 * 0.5 + sample2 * 0.5;
+            sample = sample1 * 0.5 + sample2 * 0.5;
 
-                if(!self->output->full()) {
-                    self->output->push(sample);
-                }
+            if(!self->output->full()) {
+                self->output->push(sample);
             }
         }
         std::this_thread::sleep_until(sleep);

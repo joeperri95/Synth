@@ -7,6 +7,8 @@
 #include "SineSourceNode.h"
 #include "SquareSourceNode.h"
 #include "MixerNode.h"
+#include "PassthroughNode.h"
+#include "TremoloNode.h"
 
 #include <iostream>
 #include <memory>
@@ -42,6 +44,14 @@ std::shared_ptr<Node> NodeFactory::createNode(NodeID id, std::string recipe) {
     } else if (recipe.compare("wav") == 0) {
         std::shared_ptr<Node> ret = std::unique_ptr<Node>(new FileSourceNode(id, nextAttrID));
         nextAttrID += 1;
+        return ret;
+    } else if (recipe.compare("passthrough") == 0) {
+        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PassthroughNode(id, nextAttrID, nextAttrID + 1));
+        nextAttrID += 2;
+        return ret;
+    } else if (recipe.compare("tremolo") == 0) {
+        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new TremoloNode(id, nextAttrID, nextAttrID + 1));
+        nextAttrID += 2;
         return ret;
     } else {
         spdlog::warn("Recipe not found");

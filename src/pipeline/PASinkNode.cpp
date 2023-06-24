@@ -28,7 +28,7 @@ int play_callback(
             if (queue->isQueueValid()) {
                 sample = queue->pop();
             } else {
-                spdlog::debug("PASinkNode::play_callback queue is invalid");
+                //spdlog::debug("PASinkNode::play_callback queue is invalid");
             }
             *(output + i * format.channels + j) = sample;
         }

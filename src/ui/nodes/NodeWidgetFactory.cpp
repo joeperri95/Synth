@@ -3,6 +3,8 @@
 #include "SourceNodeWidget.h"
 #include "SinkNodeWidget.h"
 #include "MixerNodeWidget.h"
+#include "PassthroughNodeWidget.h"
+#include "TremoloNodeWidget.h"
 
 namespace ui {
 
@@ -35,6 +37,14 @@ std::shared_ptr<NodeWidget> NodeWidgetFactory::create(int id, std::string s) {
     } else if (s.compare("wav") == 0) {
         std::shared_ptr<NodeWidget> ret = std::make_unique<SourceNodeWidget>(id, nextAttrID);
         nextAttrID += 1;
+        return ret;
+    } else if (s.compare("passthrough") == 0) {
+        std::shared_ptr<NodeWidget> ret = std::make_unique<PassthroughNodeWidget>(id, nextAttrID, nextAttrID + 1);
+        nextAttrID += 2;
+        return ret;
+    } else if (s.compare("tremolo") == 0) {
+        std::shared_ptr<NodeWidget> ret = std::make_unique<TremoloNodeWidget>(id, nextAttrID, nextAttrID + 1);
+        nextAttrID += 2;
         return ret;
     }
     else {

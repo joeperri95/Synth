@@ -3,23 +3,30 @@
 #include "Node.h"
 #include <vector>
 #include <map>
-#include "RingBuffer.h"
+#include "common/RingBuffer.h"
 #include "AudioFormat.h"
+#include "AudioQueue.h"
 #include <portaudio.h>
 
 typedef int16_t sample_type;
 
 namespace pipeline {
 
-template <typename T>
-class PassthroughNode : protected Node {
+class PassthroughNode : public Node {
 public:
-    PassthroughNode();
+    PassthroughNode(NodeID id, AttrID inputID, AttrID outputID);
     ~PassthroughNode();
-    void update();
+    static void update(PassthroughNode *self);
+    void onInputChanged(AttrID attr) override;
      
 protected:
-
+    AttrID outputID;
+    AttrID inputID;
+    std::shared_ptr<audio::AudioQueue<sample_type>> output;
+    std::shared_ptr<audio::AudioQueue<sample_type>> input;
+    audio::AudioFormat format;
+    bool done;
+    std::thread updateThread;
 };
 
 }

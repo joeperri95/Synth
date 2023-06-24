@@ -39,6 +39,12 @@ struct AudioFormat
         return this->bufferSize;
     }
 
+    // Return the period between buffers in microseconds 
+    int getPeriodMicroSeconds(){
+        int period_us = static_cast<int>(1000000.0f * (this->bufferSize) / (this->channels * this->sampleRate));
+        return period_us;
+    }
+
     friend std::ostream& operator<<(std::ostream& out, AudioFormat& audio) {
         out << "Channels: " << audio.channels << std::endl;
         out << "Sample Rate: " << audio.sampleRate << std::endl;

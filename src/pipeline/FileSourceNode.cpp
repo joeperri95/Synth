@@ -29,12 +29,11 @@ FileSourceNode::~FileSourceNode(){
 }
 
 void FileSourceNode::update(FileSourceNode *self) {
-    int period_us = static_cast<int>(1000000.0f * (self->format.bufferSize) / (self->format.channels * self->format.sampleRate));
+    int period_us = self->format.getPeriodMicroSeconds();
 
     while(!self->done) {
         auto now = std::chrono::high_resolution_clock::now();
         auto sleep = now + std::chrono::microseconds(period_us);
-
 
         for(int i = 0; i < self->format.bufferSize; i++) {
             for(int j = 0; j < self->format.channels; j++) {

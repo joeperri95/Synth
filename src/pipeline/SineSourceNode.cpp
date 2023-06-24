@@ -8,7 +8,7 @@ SineSourceNode::SineSourceNode(NodeID id, AttrID outputID){
     this->numOutputs = 1;
     this->outputID = outputID;
     this->outputs[outputID] = nullptr;
-    this->frequency = 220.0f;
+    this->frequency = 440.0f;
     done = false;
 
     this->format = audio::AudioFormat(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
