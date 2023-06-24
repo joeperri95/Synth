@@ -1,3 +1,9 @@
 [submodule "external/imnodes"]
 	path = external/imnodes
 	url = https://github.com/Nelarius/imnodes.git
+[submodule "plugin/BasicPlugin/imnodes"]
+	path = plugin/BasicPlugin/imnodes
+	url = https://github.com/Nelarius/imnodes.git
+[submodule "plugin/BasicPlugin/external/imnodes"]
+	path = plugin/BasicPlugin/external/imnodes
+	url = https://github.com/Nelarius/imnodes.git

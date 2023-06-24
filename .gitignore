@@ -38,6 +38,6 @@ imgui.ini
 assets/wav/*
 plot
 plot/*
-.cache/**
+**/.cache/**
 
 compile_commands.json

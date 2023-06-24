@@ -1,0 +1,8 @@
+{
+    "name" : "BasicPlugin",
+    "inputs" : 1,
+    "outputs" : 1,
+    "hasControl" : true,
+    "node_library" : "libBasicPlugin_node.so",
+    "control_library" : "libBasicPlugin_control.so"
+}
