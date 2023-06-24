@@ -4,7 +4,7 @@
 #include <map>
 #include <cstdint>
 #include "common/LockingRingBuffer.h"
-#include "AudioParameter.h"
+#include "common/AudioParameter.h"
 #include "spdlog/spdlog.h"
 
 namespace pipeline {

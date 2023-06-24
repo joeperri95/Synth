@@ -41,7 +41,7 @@ set(Sources
     pipeline/TremoloNode.cpp
     pipeline/Node.cpp
     common/AudioDevice.cpp
-    AudioParameter.cpp
+    common/AudioParameter.cpp
     common/PipelineController.cpp
     common/LockingRingBuffer.h
     common/AttributeInfo.cpp
@@ -49,8 +49,8 @@ set(Sources
 
 set(Headers
     common/AudioBuffer.h
-    AudioFormat.h 
-    AudioQueue.h
+    common/AudioFormat.h 
+    common/AudioQueue.h
     common/GUI.h
 )
 

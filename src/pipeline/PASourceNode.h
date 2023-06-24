@@ -3,8 +3,8 @@
 #include "Node.h"
 #include <vector>
 #include <map>
-#include "AudioFormat.h"
-#include "AudioQueue.h"
+#include "common/AudioFormat.h"
+#include "common/AudioQueue.h"
 #include "common/AudioDevice.h"
 
 typedef int16_t sample_type;

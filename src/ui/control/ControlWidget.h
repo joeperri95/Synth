@@ -8,7 +8,7 @@
 
 
 #include "imgui.h"
-#include "AudioParameter.h"
+#include "common/AudioParameter.h"
 
 using AudioParameterMap = std::map<std::string, AudioParameter>;
 using AudioParameterCallback = std::function<void(int, AudioParameterMap, void*)>;

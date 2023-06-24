@@ -13,8 +13,8 @@
 #include "common/GUI.h"
 #include "wav.h"
 #include "common/AudioBuffer.h"
-#include "AudioFormat.h"
-#include "AudioQueue.h"
+#include "common/AudioFormat.h"
+#include "common/AudioQueue.h"
 #include "common/AudioDevice.h"
 
 using audio::AudioBuffer;

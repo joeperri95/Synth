@@ -7,8 +7,8 @@
 #include <chrono>
 #include <map>
 #include "common/RingBuffer.h"
-#include "AudioFormat.h"
-#include "AudioQueue.h"
+#include "common/AudioFormat.h"
+#include "common/AudioQueue.h"
 #include <cmath>
 
 namespace pipeline {

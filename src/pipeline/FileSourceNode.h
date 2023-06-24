@@ -6,8 +6,8 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
-#include "AudioFormat.h"
-#include "AudioQueue.h"
+#include "common/AudioFormat.h"
+#include "common/AudioQueue.h"
 
 namespace pipeline {
 
