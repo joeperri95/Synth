@@ -6,25 +6,32 @@
 
 #include "../../../external/imnodes/imnodes.h"
 
-namespace ui {
+namespace ui { namespace nodes {
+    
+struct AttrData {
+    std::string type;
+    std::string text;
+    int id;
+};
+
+struct NodeData {
+    std::string title;
+    std::vector<AttrData> attributes;
+};
+
 class NodeWidget {
 public:
-    NodeWidget();
-    virtual ~NodeWidget() = 0;
+    NodeWidget(int id, NodeData data);
+    ~NodeWidget();
 
-    virtual void render() = 0;
-    virtual void onSelected();
+    void render();
+    void onSelected();
     void setTitle(std::string title);
 
 protected:
     int id;
     bool selected;
-    std::string title;
+    NodeData data;
 };
 
-inline NodeWidget::NodeWidget() {}
-inline NodeWidget::~NodeWidget() {}
-inline void NodeWidget::onSelected() {spdlog::info("Node {} got clicked", id);}
-inline void NodeWidget::setTitle(std::string title) {this->title = title;}
-
-}
+}}

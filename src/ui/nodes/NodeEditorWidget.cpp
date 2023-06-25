@@ -1,14 +1,16 @@
 #include "NodeEditorWidget.h"
-#include "VolumeNodeWidget.h"
-#include "SourceNodeWidget.h"
-#include "SinkNodeWidget.h"
+#include "NodeWidget.h"
 #include <iostream>
+#include <fstream>
+#include "nlohmann/json.hpp"
 
-namespace ui {
+using json = nlohmann::json;
+
+namespace ui { namespace nodes {
 
 NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controller) {
     this->controller = controller;
-    
+    this->loadRecord("etc/recipes.json");
 #define TESTING 
 #ifdef TESTING
     // Create a default pipeline
@@ -54,30 +56,11 @@ void NodeEditorWidget::render() {
     // context menu items
     if (ImGui::BeginPopup("add node"))
     { 
-        if (ImGui::MenuItem("volume")) {
-            controller->addNode("volume");
+        for (const auto &item : this->contextItems) {
+            if (ImGui::MenuItem(item.c_str())) {
+                controller->addNode(item);
+            }
         }
-
-        if (ImGui::MenuItem("source")) {
-            controller->addNode("source");
-        }
-
-        if (ImGui::MenuItem("sine")) {
-            controller->addNode("sine");
-        }
-
-        if (ImGui::MenuItem("sink")) {
-            controller->addNode("sink");
-        }
-
-        if (ImGui::MenuItem("wav")) {
-            controller->addNode("wav");
-        }
-
-        if (ImGui::MenuItem("mixer")) {
-            controller->addNode("mixer");
-        }
-
         ImGui::EndPopup();
     }
     ImGui::PopStyleVar();
@@ -127,4 +110,16 @@ void NodeEditorWidget::render() {
 
 }
 
+void NodeEditorWidget::loadRecord(std::string filename) {
+    std::ifstream ifs(filename);
+
+    json j = json::parse(ifs);    
+    json recipe_list = j["recipes"];    
+    
+    for (const auto &i: recipe_list) {
+        std::string title(i["title"]);
+        this->contextItems.push_back((title));
+    }
 }
+
+}}

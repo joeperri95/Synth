@@ -47,7 +47,7 @@ private:
     int height;
     int width;
 
-    std::unique_ptr<NodeEditorWidget> nodes;
+    std::unique_ptr<nodes::NodeEditorWidget> nodes;
 
     // new
     std::vector<std::unique_ptr<ControlWidget>> widgets;

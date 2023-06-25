@@ -1,0 +1,57 @@
+{
+    "recipes" : [
+        {
+           "title" : "volume",
+           "attributes" : [
+                {"type" : "input", "text": "input"},  
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
+           "title" : "microphone",
+           "attributes" : [
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
+           "title" : "sine",
+           "attributes" : [
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
+           "title" : "sink",
+           "attributes" : [
+                {"type" : "input", "text": "input"}
+           ]
+        },
+        {
+           "title" : "mixer",
+           "attributes" : [
+                {"type" : "input", "text": "input 1"},  
+                {"type" : "output", "text": "output"},
+                {"type" : "input", "text": "input 2"}
+           ]
+        },
+        {
+           "title" : "wav",
+           "attributes" : [
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
+           "title" : "passthrough",
+           "attributes" : [
+                {"type" : "input", "text": "input"},  
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
+           "title" : "tremolo",
+           "attributes" : [
+                {"type" : "input", "text": "input"},  
+                {"type" : "output", "text": "output"}
+           ]
+        }
+    ]
+}

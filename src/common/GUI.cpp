@@ -3,12 +3,12 @@
 namespace ui {
 
 GUI::GUI() {
-    title = "test";
+    title = "synth";
     height = 800;
     width = 600;
     shouldQuit = false;
     this->controller = std::make_shared<PipelineController>();
-    this->nodes = std::make_unique<NodeEditorWidget>(this->controller);
+    this->nodes = std::make_unique<nodes::NodeEditorWidget>(this->controller);
 }
 
 GUI::~GUI() {

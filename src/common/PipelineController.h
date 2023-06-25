@@ -34,7 +34,7 @@ class PipelineController {
     void removeLink(LinkID link);
 
     std::map<LinkID, std::pair<int, int>> getLinks();
-    std::vector<std::shared_ptr<ui::NodeWidget>> getNodes();
+    std::vector<std::shared_ptr<ui::nodes::NodeWidget>> getNodes();
     std::vector<std::shared_ptr<ui::ControlWidget>> getWidgets();
 
     // broker params to node
@@ -50,7 +50,7 @@ class PipelineController {
 
     // ImNode section
     std::map<LinkID, std::pair<AttrID, AttrID>> links;
-    std::map<NodeID, std::shared_ptr<ui::NodeWidget>> nodes;
+    std::map<NodeID, std::shared_ptr<ui::nodes::NodeWidget>> nodes;
     std::set<NodeID> selectedNodes;
 
     // Control widget section
@@ -62,7 +62,7 @@ class PipelineController {
     NodeID nextNodeID;
 
     ui::ControlWidgetFactory controlFactory; 
-    ui::NodeWidgetFactory nodeWidgetFactory; 
+    ui::nodes::NodeWidgetFactory nodeWidgetFactory; 
     pipeline::NodeFactory nodeFactory;
 
 };

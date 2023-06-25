@@ -4,6 +4,7 @@ find_package(SDL2 REQUIRED)
 find_package(imgui REQUIRED)
 find_package(implot REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 set(Sources
     main.cpp
@@ -17,12 +18,7 @@ set(Sources
     ../external/imnodes/imnodes_internal.h
     ui/nodes/NodeEditorWidget.cpp
     ui/nodes/NodeWidgetFactory.cpp
-    ui/nodes/VolumeNodeWidget.cpp
-    ui/nodes/SinkNodeWidget.cpp
-    ui/nodes/SourceNodeWidget.cpp
-    ui/nodes/PassthroughNodeWidget.cpp
-    ui/nodes/MixerNodeWidget.cpp
-    ui/nodes/TremoloNodeWidget.cpp
+    ui/nodes/NodeWidget.cpp
     ui/control/ControlWidgetFactory.cpp
     ui/control/VolumeWidget.cpp
     ui/control/TremoloWidget.cpp
@@ -68,4 +64,5 @@ target_link_libraries(synth -lm -lportaudio -lasound -lpthread
                         imgui::imgui
                         implot::implot
                         spdlog::spdlog
+                        nlohmann_json::nlohmann_json
                         )

@@ -8,7 +8,7 @@
 #include "NodeWidget.h"
 #include "common/PipelineController.h"
 
-namespace ui {
+namespace ui { namespace nodes {
 class NodeEditorWidget {
 public:
     NodeEditorWidget(std::shared_ptr<PipelineController> controller);
@@ -24,5 +24,10 @@ protected:
     // communicates to audio pipeline
     std::shared_ptr<PipelineController> controller;
 
+    // Load a list of available nodes to be added to the context menu
+    void loadRecord(std::string filename);
+    std::vector<std::string> contextItems;
+
 };
-}
+
+}}

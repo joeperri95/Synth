@@ -1,56 +1,51 @@
 #include "NodeWidgetFactory.h"
-#include "VolumeNodeWidget.h"
-#include "SourceNodeWidget.h"
-#include "SinkNodeWidget.h"
-#include "MixerNodeWidget.h"
-#include "PassthroughNodeWidget.h"
-#include "TremoloNodeWidget.h"
+#include "NodeWidget.h"
+#include "ui/nodes/NodeWidget.h"
+#include <fstream>
 
-namespace ui {
+using json = nlohmann::json;
+namespace ui { namespace nodes {
 
-NodeWidgetFactory::NodeWidgetFactory() : nextAttrID(1) {}
+NodeWidgetFactory::NodeWidgetFactory() : nextAttrID(1), recipes() {
+    loadRecord("etc/recipes.json");
+}
 
 NodeWidgetFactory::~NodeWidgetFactory() {}
 
 std::shared_ptr<NodeWidget> NodeWidgetFactory::create(int id, std::string s) {
-    if (s.compare("volume") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<VolumeNodeWidget>(id, nextAttrID, nextAttrID + 1);
-        nextAttrID += 2;
+    auto it = this->recipes.find(s);
+    if (it != this->recipes.end()) {
+        std::vector<AttrData> attrs;
+        for (const auto &j : it->second.attributes) {
+            attrs.push_back({.type = j.type, .text = j.text, .id = nextAttrID++});
+        }
+        NodeData data {.title = it->second.title, .attributes = attrs};
+        std::shared_ptr<NodeWidget> ret = std::make_unique<NodeWidget>(id, data);
         return ret;
-    } else if (s.compare("source") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<SourceNodeWidget>(id, nextAttrID);
-        nextAttrID += 1;
-        return ret;
-    } else if (s.compare("sine") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<SourceNodeWidget>(id, nextAttrID);
-        ret->setTitle("sine");
-        nextAttrID += 1;
-        return ret;
-    } else if (s.compare("sink") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<SinkNodeWidget>(id, nextAttrID);
-        nextAttrID += 1;
-        return ret;
-    } else if (s.compare("mixer") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<MixerNodeWidget>(id, nextAttrID, nextAttrID + 1, nextAttrID + 2);
-        nextAttrID += 3;
-        return ret;
-    } else if (s.compare("wav") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<SourceNodeWidget>(id, nextAttrID);
-        nextAttrID += 1;
-        return ret;
-    } else if (s.compare("passthrough") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<PassthroughNodeWidget>(id, nextAttrID, nextAttrID + 1);
-        nextAttrID += 2;
-        return ret;
-    } else if (s.compare("tremolo") == 0) {
-        std::shared_ptr<NodeWidget> ret = std::make_unique<TremoloNodeWidget>(id, nextAttrID, nextAttrID + 1);
-        nextAttrID += 2;
-        return ret;
-    }
-    else {
-        spdlog::warn("Recipe not found");
+    } else {
+        spdlog::warn("Node recipe not found {}", s);
         return nullptr;
     }
 }
 
+void NodeWidgetFactory::loadRecord(std::string filename) {
+    std::ifstream ifs(filename);
+
+    json j = json::parse(ifs);    
+    json recipe_list = j["recipes"];    
+    
+    for (const auto &i: recipe_list) {
+        std::string title(i["title"]);
+        std::vector<Attribute> attrs;
+        for (const auto &j: i["attributes"]) {
+            Attribute attribute {
+               .type = j["type"],
+               .text = j["text"]
+            };
+            attrs.push_back(attribute);
+        }
+        this->recipes[title] = {.title = title, .attributes = attrs};
+    }
 }
+
+}}

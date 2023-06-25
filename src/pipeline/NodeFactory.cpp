@@ -23,7 +23,7 @@ std::shared_ptr<Node> NodeFactory::createNode(NodeID id, std::string recipe) {
         std::shared_ptr<Node> ret = std::unique_ptr<Node>(new VolumeNode(id, nextAttrID, nextAttrID + 1));
         nextAttrID += 2;
         return ret;
-    } else if (recipe.compare("source") == 0) {
+    } else if (recipe.compare("microphone") == 0) {
         std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PASourceNode(id, nextAttrID));
         nextAttrID += 1;
         return ret;
@@ -54,7 +54,7 @@ std::shared_ptr<Node> NodeFactory::createNode(NodeID id, std::string recipe) {
         nextAttrID += 2;
         return ret;
     } else {
-        spdlog::warn("Recipe not found");
+        spdlog::warn("Pipeline recipe not found {}", recipe);
         return nullptr;
     }
 }

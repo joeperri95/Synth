@@ -3,15 +3,14 @@
 using pipeline::LinkID;
 using pipeline::NodeID;
 using pipeline::Node;
-using ui::NodeWidget;
+using ui::nodes::NodeWidget;
 using ui::ControlWidget;
 
-PipelineController::PipelineController() : mutex(), pipeline(), links(), nodes(), selectedNodes(), nextLinkID(1), nextNodeID(1), controlFactory(), nodeWidgetFactory(), nodeFactory(){
-}
+PipelineController::PipelineController() :  mutex(), pipeline(), links(), nodes(), selectedNodes(), 
+                                            nextLinkID(1), nextNodeID(1), controlFactory(), 
+                                            nodeWidgetFactory(), nodeFactory() {}
 
-PipelineController::~PipelineController() {
-
-}
+PipelineController::~PipelineController() {}
 
 void PipelineController::notified(NodeID id, AudioParameterMap params, void *arg) {
     PipelineController *self = (PipelineController *) arg;
@@ -43,7 +42,6 @@ NodeID PipelineController::addNode(std::string recipe) {
         this->widgets[ret] = widget;
         this->widgets[ret]->addSubscriber(ret, PipelineController::notified, this);
     }
-
 
     return ret;
 }
@@ -90,9 +88,9 @@ std::map<LinkID, std::pair<int, int>> PipelineController::getLinks() {
     return this->links;
 }
 
-std::vector<std::shared_ptr<ui::NodeWidget>> PipelineController::getNodes() {
+std::vector<std::shared_ptr<ui::nodes::NodeWidget>> PipelineController::getNodes() {
     std::lock_guard lock(this->mutex);
-    std::vector<std::shared_ptr<ui::NodeWidget>> ret;
+    std::vector<std::shared_ptr<ui::nodes::NodeWidget>> ret;
     for (const auto & [key, value]: this->nodes) {
         ret.push_back(value);
     }

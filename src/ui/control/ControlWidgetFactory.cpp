@@ -20,7 +20,7 @@ std::shared_ptr<ControlWidget> ControlWidgetFactory::create(int id, std::string 
         std::shared_ptr<ControlWidget> ret = std::make_unique<TremoloWidget>(id, 0.5, 5.0);
         return ret;
     } else {
-        spdlog::warn("Recipe not found");
+        spdlog::warn("Control recipe not found {}", s);
         return nullptr;
     }
 }
