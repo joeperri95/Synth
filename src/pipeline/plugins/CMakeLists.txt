@@ -70,3 +70,6 @@ target_link_libraries(tremolo_node ${NodeLinkLibraries})
 
 add_library(volume_node SHARED VolumeNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
 target_link_libraries(volume_node ${NodeLinkLibraries})
+
+add_library(bitcrush_node SHARED BitCrushNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
+target_link_libraries(bitcrush_node ${NodeLinkLibraries})
