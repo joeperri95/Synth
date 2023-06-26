@@ -97,4 +97,10 @@ void TremoloNode::onStateChanged(std::map<std::string, AudioParameter> newState,
 
 }
 
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+        *node = new TremoloNode(id, nextAttrId, nextAttrId + 1);
+        return nextAttrId + 2;
+    }   
+}
 } // pipeline

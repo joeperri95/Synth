@@ -14,7 +14,6 @@ PipelineController::~PipelineController() {}
 
 void PipelineController::notified(NodeID id, AudioParameterMap params, void *arg) {
     PipelineController *self = (PipelineController *) arg;
-    spdlog::info("ok got here now dispatch params to pipeline");
     self->notify(id, params);
 }
 

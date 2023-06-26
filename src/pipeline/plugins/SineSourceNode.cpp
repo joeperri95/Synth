@@ -67,5 +67,11 @@ void SineSourceNode::onStateChanged(std::map<std::string, AudioParameter> newSta
     }
 }
 
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+        *node = new SineSourceNode(id, nextAttrId);
+        return nextAttrId + 1;
+    }   
+}
 
 } // pipeline

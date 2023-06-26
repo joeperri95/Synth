@@ -82,4 +82,11 @@ void MixerNode::onInputChanged(AttrID attr) {
     }
 }
 
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+        *node = new MixerNode(id, nextAttrId, nextAttrId + 1, nextAttrId + 2);
+        return nextAttrId + 3;
+    }   
+}
+
 } // pipeline

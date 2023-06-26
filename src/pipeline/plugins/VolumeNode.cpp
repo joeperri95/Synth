@@ -80,4 +80,11 @@ void VolumeNode::onStateChanged(std::map<std::string, AudioParameter> newState, 
     }
 }
 
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+        *node = new VolumeNode(id, nextAttrId, nextAttrId + 1);
+        return nextAttrId + 2;
+    }   
+}
+
 } // pipeline

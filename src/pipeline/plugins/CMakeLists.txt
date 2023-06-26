@@ -26,6 +26,11 @@ set(Headers
     ../Node.h
 )
 
+set(Sources
+    ../Node.cpp
+    ../../common/AudioParameter.cpp
+)
+
 set(NodeLinkLibraries
     -lm -lportaudio -lasound -lpthread spdlog::spdlog
 )
@@ -39,38 +44,26 @@ add_compile_options(-pthread)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-
 add_library(fileSink_node SHARED FileSinkNode.cpp ../Node.cpp ${Headers})
 target_link_libraries(fileSink_node ${NodeLinkLibraries})
-
 
 add_library(fileSource_node SHARED FileSourceNode.cpp ../Node.cpp ${Headers})
 target_link_libraries(fileSource_node ${NodeLinkLibraries})
 
-if(FALSE)
-
-add_library(mixer_node SHARED MixerNode.cpp ${Headers})
+add_library(mixer_node SHARED MixerNode.cpp ../Node.cpp ../../common/AudioParameter.cpp  ${Headers})
 target_link_libraries(mixer_node ${NodeLinkLibraries})
 
-add_library(paSink_node SHARED PASinkNode.cpp ${Headers})
-target_link_libraries(paSink_node ${NodeLinkLibraries})
-
-add_library(paSource_node SHARED PASourceNode.cpp ${Headers})
-target_link_libraries(paSource_node ${NodeLinkLibraries})
-
-add_library(passthrough_node SHARED PassthroughNode.cpp ${Headers})
+add_library(passthrough_node SHARED PassthroughNode.cpp ../Node.cpp ${Headers})
 target_link_libraries(passthrough_node ${NodeLinkLibraries})
 
-add_library(sineSource_node SHARED SineSourceNode.cpp ${Headers})
+add_library(sineSource_node SHARED SineSourceNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
 target_link_libraries(sineSource_node ${NodeLinkLibraries})
 
-add_library(squareSource_node SHARED SquareSourceNode.cpp ${Headers})
+add_library(squareSource_node SHARED SquareSourceNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
 target_link_libraries(squareSource_node ${NodeLinkLibraries})
 
-add_library(tremolo_node SHARED TremoloNode.cpp ${Headers})
+add_library(tremolo_node SHARED TremoloNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
 target_link_libraries(tremolo_node ${NodeLinkLibraries})
 
-add_library(volume_node SHARED VolumeNode.cpp ${Headers})
+add_library(volume_node SHARED VolumeNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
 target_link_libraries(volume_node ${NodeLinkLibraries})
-
-endif()

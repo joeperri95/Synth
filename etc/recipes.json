@@ -2,7 +2,7 @@
     "recipes" : [
         {
            "title" : "volume",
-           "node_library" : "plugin.so",
+           "node_library" : "lib/libvolume_node.so",
            "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
@@ -11,7 +11,7 @@
         },
         {
            "title" : "microphone",
-           "node_library" : "plugin.so",
+           "node_library" : "lib/libpaSource_node.so",
            "control_library" : "",
            "attributes" : [
                 {"type" : "output", "text": "output"}
@@ -19,7 +19,7 @@
         },
         {
            "title" : "sine",
-           "node_library" : "plugin.so",
+           "node_library" : "lib/libsineSource_node.so",
            "control_library" : "",
            "attributes" : [
                 {"type" : "output", "text": "output"}
@@ -35,7 +35,7 @@
         },
         {
            "title" : "mixer",
-           "node_library" : "plugin.so",
+           "node_library" : "lib/libmixer_node.so",
            "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input 1"},  
@@ -53,7 +53,7 @@
         },
         {
            "title" : "passthrough",
-           "node_library" : "plugin.so",
+           "node_library" : "lib/libpassthrough_node.so",
            "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
@@ -62,7 +62,7 @@
         },
         {
            "title" : "tremolo",
-           "node_library" : "plugin.so",
+           "node_library" : "lib/libtremolo_node.so",
            "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"},  

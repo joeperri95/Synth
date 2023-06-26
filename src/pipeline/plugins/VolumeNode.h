@@ -32,4 +32,8 @@ private:
 
 };
 
+extern "C" {
+   int build_node(int id, int nextAttrId, Node ** node);
+}
+
 }

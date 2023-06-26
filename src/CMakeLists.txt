@@ -25,15 +25,9 @@ set(Sources
     ui/control/SineControlWidget.cpp
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
-    pipeline/VolumeNode.cpp
-    pipeline/SineSourceNode.cpp
-    pipeline/SquareSourceNode.cpp
-    pipeline/PASinkNode.cpp
-    pipeline/PASourceNode.cpp
-    pipeline/MixerNode.cpp
-    pipeline/PassthroughNode.cpp
-    pipeline/TremoloNode.cpp
     pipeline/Node.cpp
+    pipeline/PASourceNode.cpp
+    pipeline/PASinkNode.cpp
     common/AudioDevice.cpp
     common/AudioParameter.cpp
     common/PipelineController.cpp

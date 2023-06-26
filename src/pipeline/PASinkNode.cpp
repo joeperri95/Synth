@@ -9,7 +9,6 @@ int play_callback(
     PaStreamCallbackFlags statusFlags,
     void *userData) {
 
-    
     audio::AudioQueue<sample_type> *queue = (audio::AudioQueue<sample_type> *)userData;
 
     if (queue == nullptr) {

@@ -88,5 +88,11 @@ void SquareSourceNode::onStateChanged(std::map<std::string, AudioParameter> newS
     }
 }
 
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+        *node = new SquareSourceNode(id, nextAttrId);
+        return nextAttrId + 1;
+    }   
+}
 
 } // pipeline

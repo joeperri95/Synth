@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "Node.h"
@@ -8,29 +9,30 @@
 #include "common/RingBuffer.h"
 #include "common/AudioFormat.h"
 #include "common/AudioQueue.h"
-#include "common/AudioParameter.h"
+#include <cmath>
 
 namespace pipeline {
 
-class TremoloNode : public Node {
+class SquareSourceNode : public Node {
 public:
-    TremoloNode(NodeID id, AttrID inputID, AttrID outputID);
-    ~TremoloNode();
-    static void update(TremoloNode *self);
+    SquareSourceNode(NodeID id, AttrID outputID);
+    ~SquareSourceNode();
+    static void update(SquareSourceNode *self);
     void onInputChanged(AttrID attr) override;
     void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
      
 private:
-    AttrID inputID;
     AttrID outputID;
-    std::shared_ptr<audio::AudioQueue<sample_type>> input;
     std::shared_ptr<audio::AudioQueue<sample_type>> output;
     audio::AudioFormat format;
-    float amplitude;
-    float frequency;
     bool done;
+    bool validQueue;
+    float frequency;
     std::thread updateThread;
-
 };
+
+extern "C" {
+   int build_node(int id, int nextAttrId, Node ** node);
+}
 
 }

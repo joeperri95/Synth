@@ -1,18 +1,13 @@
 #include "NodeFactory.h"
-#include "VolumeNode.h"
-#include "PASourceNode.h"
-#include "PASinkNode.h"
-#include "SineSourceNode.h"
-#include "SquareSourceNode.h"
-#include "MixerNode.h"
-#include "PassthroughNode.h"
-#include "TremoloNode.h"
 
 #include "nlohmann/json.hpp"
 #include <dlfcn.h>
 #include <iostream>
 #include <memory>
 #include <fstream>
+
+#include "PASinkNode.h"
+#include "PASourceNode.h"
 
 using json = nlohmann::json;
 
@@ -22,38 +17,18 @@ NodeFactory::NodeFactory() : nextAttrID(1) {loadRecord("etc/recipes.json");}
 NodeFactory::~NodeFactory() {}
 
 std::shared_ptr<Node> NodeFactory::createNode(NodeID id, std::string recipe) {
-    if (recipe.compare("volume") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new VolumeNode(id, nextAttrID, nextAttrID + 1));
-        nextAttrID += 2;
-        return ret;
-    } else if (recipe.compare("microphone") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PASourceNode(id, nextAttrID));
-        nextAttrID += 1;
-        return ret;
-    } else if (recipe.compare("sine") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new SineSourceNode(id, nextAttrID));
-        //std::shared_ptr<Node> ret = std::unique_ptr<Node>(new SquareSourceNode(id, nextAttrID));
-        nextAttrID += 1;
-        return ret;
-    } else if (recipe.compare("sink") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PASinkNode(id, nextAttrID));
-        //std::shared_ptr<Node> ret = std::unique_ptr<Node>(new FileSinkNode(id, nextAttrID));
-        nextAttrID += 1;
-        return ret;
-    } else if (recipe.compare("mixer") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new MixerNode(id, nextAttrID, nextAttrID + 1, nextAttrID + 2));
-        nextAttrID += 3;
-        return ret;
-    } else if (recipe.compare("wav") == 0) {
-        return loadNode(id, "wav");
-    } else if (recipe.compare("passthrough") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PassthroughNode(id, nextAttrID, nextAttrID + 1));
-        nextAttrID += 2;
-        return ret;
-    } else if (recipe.compare("tremolo") == 0) {
-        std::shared_ptr<Node> ret = std::unique_ptr<Node>(new TremoloNode(id, nextAttrID, nextAttrID + 1));
-        nextAttrID += 2;
-        return ret;
+    // exclude portaudio nodes from the plugin framework for now
+    if(recipes.contains(recipe)) {
+        if(recipe.compare("microphone") == 0)  {
+            std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PASourceNode(id, nextAttrID++));
+            return ret;
+        } else if(recipe.compare("sink") == 0)  {
+            spdlog::info("Creating sink");
+            std::shared_ptr<Node> ret = std::unique_ptr<Node>(new PASinkNode(id, nextAttrID++));
+            return ret;
+        } else {
+            return loadNode(id, recipe);
+        }
     } else {
         spdlog::warn("Pipeline recipe not found {}", recipe);
         return nullptr;
@@ -61,27 +36,25 @@ std::shared_ptr<Node> NodeFactory::createNode(NodeID id, std::string recipe) {
 }
 
 std::shared_ptr<Node> NodeFactory::loadNode(NodeID id, std::string recipe) { 
-    
     std::string filename(recipes[recipe]);
 
-    std::cout << filename << std::endl;
     void * handle = dlopen(filename.c_str(), RTLD_LAZY);
     if (handle == nullptr) {
-        std::cout << "Pack it up boys 1 " << dlerror() <<std::endl;
+        spdlog::error("Issue opening library {} {}", filename, dlerror());
         exit(1);   
     }
 
     void * function_return = dlsym(handle, "build_node"); 
 
     if (function_return == nullptr) {
-        std::cout << "Pack it up boys 2 " << dlerror() <<std::endl;
+        spdlog::error("Issue loading symbol build_node {}", dlerror());
         exit(1);   
     }
 
     int (*function)(int, int, Node **) = reinterpret_cast<int (*)(int, int, Node **)>(function_return);
 
     if (function == nullptr) {
-        std::cout << "Pack it up boys 3 " << dlerror() <<std::endl;
+        spdlog::error("Issue forming function from symbol build_node {}", dlerror());
         exit(1);   
     }
 
@@ -89,7 +62,7 @@ std::shared_ptr<Node> NodeFactory::loadNode(NodeID id, std::string recipe) {
     nextAttrID = function(id, nextAttrID, &node);
     
     if(node == nullptr) {
-        std::cout << "Pack it up boys 4" <<std::endl;
+        spdlog::error("Issue creating node in library file");
         exit(1);   
     }
      
