@@ -116,4 +116,12 @@ void FileSourceNode::readWavData() {
 
 }
 
+
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+        *node = new FileSourceNode(id, nextAttrId);
+        return nextAttrId + 1;
+    }   
+}
+
 } // pipeline

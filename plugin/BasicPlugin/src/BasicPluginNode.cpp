@@ -63,4 +63,10 @@ void BasicPluginNode::onInputChanged(AttrID attr) {
     }
 }
 
+extern "C" {
+    int build_node(int id, int nextAttrId, Node * node) {
+       node = new BasicPluginNode(id, nextAttrId, nextAttrId + 1);
+       return nextAttrId + 2;
+    }   
+}
 } // pipeline

@@ -69,4 +69,11 @@ void FileSinkNode::onInputChanged(AttrID attr) {
     this->validQueue = this->inputs[attr] != nullptr;
 }
      
+extern "C" {
+    int build_node(int id, int nextAttrId, Node ** node) {
+       *node = new FileSinkNode(id, nextAttrId);
+       return nextAttrId + 1;
+    }   
+}
+
 }

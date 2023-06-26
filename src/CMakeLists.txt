@@ -29,8 +29,6 @@ set(Sources
     pipeline/SineSourceNode.cpp
     pipeline/SquareSourceNode.cpp
     pipeline/PASinkNode.cpp
-    pipeline/FileSinkNode.cpp
-    pipeline/FileSourceNode.cpp
     pipeline/PASourceNode.cpp
     pipeline/MixerNode.cpp
     pipeline/PassthroughNode.cpp
@@ -49,6 +47,8 @@ set(Headers
     common/AudioQueue.h
     common/GUI.h
 )
+
+add_subdirectory(pipeline/plugins)
 
 include_directories(.)
 include_directories("../bindings")

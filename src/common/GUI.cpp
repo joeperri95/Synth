@@ -1,4 +1,5 @@
 #include "GUI.h"
+#include <SDL_video.h>
 #include <iostream>
 namespace ui {
 
@@ -31,7 +32,9 @@ void GUI::initialize() {
                                                                             SDL_WINDOWPOS_CENTERED, 
                                                                             SDL_WINDOWPOS_CENTERED,
                                                                             this->height, this->width, 
-                                                                            SDL_WINDOW_SHOWN));
+                                                                            SDL_WINDOW_SHOWN |
+                                                                            SDL_WINDOW_RESIZABLE
+                                                                            ));
 
     renderer = std::unique_ptr<SDL_Renderer, sdl_deleter>(SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED));
     IMGUI_CHECKVERSION();

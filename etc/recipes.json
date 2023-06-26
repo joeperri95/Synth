@@ -2,6 +2,8 @@
     "recipes" : [
         {
            "title" : "volume",
+           "node_library" : "plugin.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}
@@ -9,24 +11,32 @@
         },
         {
            "title" : "microphone",
+           "node_library" : "plugin.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "output", "text": "output"}
            ]
         },
         {
            "title" : "sine",
+           "node_library" : "plugin.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "output", "text": "output"}
            ]
         },
         {
            "title" : "sink",
+           "node_library" : "lib/libfileSink_node.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"}
            ]
         },
         {
            "title" : "mixer",
+           "node_library" : "plugin.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input 1"},  
                 {"type" : "output", "text": "output"},
@@ -35,12 +45,16 @@
         },
         {
            "title" : "wav",
+           "node_library" : "lib/libfileSource_node.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "output", "text": "output"}
            ]
         },
         {
            "title" : "passthrough",
+           "node_library" : "plugin.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}
@@ -48,6 +62,8 @@
         },
         {
            "title" : "tremolo",
+           "node_library" : "plugin.so",
+           "control_library" : "",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}

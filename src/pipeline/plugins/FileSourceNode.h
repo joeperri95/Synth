@@ -30,6 +30,8 @@ private:
     unsigned int index;
     std::vector<sample_type> data;
     void readWavData();
+
+   int build_node(int id, int nextAttrId, Node **node);
 };
 
 }
