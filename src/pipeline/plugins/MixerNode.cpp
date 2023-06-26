@@ -84,7 +84,7 @@ void MixerNode::onInputChanged(AttrID attr) {
 
 extern "C" {
     int build_node(int id, int nextAttrId, Node ** node) {
-        *node = new MixerNode(id, nextAttrId, nextAttrId + 1, nextAttrId + 2);
+        *node = new MixerNode(id, nextAttrId, nextAttrId + 2, nextAttrId + 1);
         return nextAttrId + 3;
     }   
 }

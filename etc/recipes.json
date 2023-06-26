@@ -44,6 +44,16 @@
            ]
         },
         {
+           "title" : "splitter",
+           "node_library" : "lib/libsplitter_node.so",
+           "control_library" : "",
+           "attributes" : [
+                {"type" : "output", "text": "output 1"},  
+                {"type" : "input", "text": "input"},
+                {"type" : "output", "text": "output 2"}
+           ]
+        },
+        {
            "title" : "wav",
            "node_library" : "lib/libfileSource_node.so",
            "control_library" : "",

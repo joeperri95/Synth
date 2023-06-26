@@ -53,6 +53,9 @@ target_link_libraries(fileSource_node ${NodeLinkLibraries})
 add_library(mixer_node SHARED MixerNode.cpp ../Node.cpp ../../common/AudioParameter.cpp  ${Headers})
 target_link_libraries(mixer_node ${NodeLinkLibraries})
 
+add_library(splitter_node SHARED SplitterNode.cpp ../Node.cpp ../../common/AudioParameter.cpp  ${Headers})
+target_link_libraries(splitter_node ${NodeLinkLibraries})
+
 add_library(passthrough_node SHARED PassthroughNode.cpp ../Node.cpp ${Headers})
 target_link_libraries(passthrough_node ${NodeLinkLibraries})
 
