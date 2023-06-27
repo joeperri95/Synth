@@ -21,6 +21,7 @@ set(Sources
     ui/nodes/NodeWidget.cpp
     ui/control/ControlWidgetFactory.cpp
     ui/control/VolumeWidget.cpp
+    ui/control/VibratoWidget.cpp
     ui/control/TremoloWidget.cpp
     ui/control/SineControlWidget.cpp
     pipeline/Pipeline.cpp

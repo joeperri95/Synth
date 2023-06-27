@@ -80,6 +80,15 @@
            ]
         },
         {
+           "title" : "vibrato",
+           "node_library" : "lib/libvibrato_node.so",
+           "control_library" : "",
+           "attributes" : [
+                {"type" : "input", "text": "input"},  
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
            "title" : "tremolo",
            "node_library" : "lib/libtremolo_node.so",
            "control_library" : "",

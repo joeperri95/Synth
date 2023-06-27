@@ -16,7 +16,7 @@ NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controlle
     // Create a default pipeline
     controller->addNode("wav");
     controller->addNode("passthrough");
-    controller->addNode("bitcrush");
+    controller->addNode("vibrato");
     controller->addNode("volume");
     controller->addNode("sink");
     controller->addLink(1, 2);

@@ -73,3 +73,6 @@ target_link_libraries(volume_node ${NodeLinkLibraries})
 
 add_library(bitcrush_node SHARED BitCrushNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
 target_link_libraries(bitcrush_node ${NodeLinkLibraries})
+
+add_library(vibrato_node SHARED VibratoNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
+target_link_libraries(vibrato_node ${NodeLinkLibraries})
