@@ -6,8 +6,10 @@ namespace ui {
 
 int SineControlWidget::count = 1;
 
-SineControlWidget::SineControlWidget(int id, float frequency) {
-    this->frequency = frequency;
+const float DEFAULT_FREQUENCY = 220.0f;
+
+SineControlWidget::SineControlWidget(int id) {
+    this->frequency = DEFAULT_FREQUENCY;
     this->_name = "sine-controller-" + std::to_string(SineControlWidget::count++);
     this->_id = id;
     this->nextSubscriberID = 1;
@@ -59,4 +61,11 @@ void SineControlWidget::removeSubscriber(int id) {
         this->subscribers.erase(it);
     }
 }
+
+extern "C" {
+    void build_control(int id, ControlWidget ** control) {
+        *control = new SineControlWidget(id);
+    }   
+}
+
 }

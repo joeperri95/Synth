@@ -38,7 +38,7 @@
         {
            "title" : "sine",
            "node_library" : "lib/libsineSource_node.so",
-           "control_library" : "",
+           "control_library" : "lib/libsineSource_control.so",
            "attributes" : [
                 {"type" : "output", "text": "output"}
            ]

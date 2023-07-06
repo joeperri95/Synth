@@ -24,7 +24,6 @@ set(Sources
     ui/control/VibratoWidget.cpp
     ui/control/TremoloWidget.cpp
     ui/control/BiquadWidget.cpp
-    ui/control/SineControlWidget.cpp
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
     pipeline/Node.cpp
@@ -45,6 +44,7 @@ set(Headers
 )
 
 add_subdirectory(pipeline/plugins)
+add_subdirectory(ui/control/plugins)
 
 include_directories(.)
 include_directories("../bindings")

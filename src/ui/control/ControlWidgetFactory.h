@@ -13,6 +13,11 @@ public:
     ControlWidgetFactory();
     ~ControlWidgetFactory();
     std::shared_ptr<ControlWidget> create(int id, std::string s); 
+    std::shared_ptr<ControlWidget> load(int id, std::string recipe);
+    
+private:
+    void loadRecord(std::string filename);
+    std::map<std::string,std::string> recipes;
 };
 
 }

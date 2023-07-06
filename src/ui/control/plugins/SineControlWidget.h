@@ -7,7 +7,7 @@ namespace ui {
 
 class SineControlWidget : public ControlWidget {
 public:
-    SineControlWidget(int id, float frequency);
+    SineControlWidget(int id);
     ~SineControlWidget();
     void render() override;
 
@@ -25,5 +25,9 @@ private:
     static int count;
 
 };
+
+extern "C" {
+   void build_control(int id, ControlWidget ** control);
+}
 
 }
