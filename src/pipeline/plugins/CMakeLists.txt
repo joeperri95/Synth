@@ -44,6 +44,9 @@ add_compile_options(-pthread)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+add_library(biquad_node SHARED BiquadNode.cpp ../Node.cpp ../../common/AudioParameter.cpp ${Headers})
+target_link_libraries(biquad_node ${NodeLinkLibraries})
+
 add_library(fileSink_node SHARED FileSinkNode.cpp ../Node.cpp ${Headers})
 target_link_libraries(fileSink_node ${NodeLinkLibraries})
 

@@ -3,6 +3,7 @@
 #include "TremoloWidget.h"
 #include "VibratoWidget.h"
 #include "SineControlWidget.h"
+#include "BiquadWidget.h"
 
 namespace ui {
 
@@ -22,6 +23,9 @@ std::shared_ptr<ControlWidget> ControlWidgetFactory::create(int id, std::string 
         return ret;
     } else if (s.compare("vibrato") == 0) {
         std::shared_ptr<ControlWidget> ret = std::make_unique<VibratoWidget>(id, 20, 5.0);
+        return ret;
+    } else if (s.compare("biquad") == 0) {
+        std::shared_ptr<ControlWidget> ret = std::make_unique<BiquadWidget>(id, 440.0, BiquadWidget::FilterType::lowpass);
         return ret;
     } else {
         spdlog::warn("Control recipe not found {}", s);

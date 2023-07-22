@@ -16,8 +16,8 @@ SineSourceNode::SineSourceNode(NodeID id, AttrID outputID){
     this->output = std::make_shared<audio::AudioQueue<sample_type>>();
     this->output->setFormat(format);
     this->output->setQueue(this->outputs[outputID]);
-    
-    this->updateThread = std::thread(SineSourceNode::update, this); 
+
+    this->updateThread = std::thread(SineSourceNode::update, this);
 }
 
 SineSourceNode::~SineSourceNode(){
@@ -44,8 +44,8 @@ void SineSourceNode::update(SineSourceNode *self) {
         }
         std::this_thread::sleep_until(sleep);
     }
-} 
- 
+}
+
 void SineSourceNode::onInputChanged(AttrID attr) {
     if(this->outputs.find(attr) != this->outputs.end()) {
         this->output->setQueue(this->outputs[attr]);
@@ -71,7 +71,7 @@ extern "C" {
     int build_node(int id, int nextAttrId, Node ** node) {
         *node = new SineSourceNode(id, nextAttrId);
         return nextAttrId + 1;
-    }   
+    }
 }
 
 } // pipeline

@@ -19,6 +19,15 @@
            ]
         },
         {
+           "title" : "biquad",
+           "node_library" : "lib/libbiquad_node.so",
+           "control_library" : "",
+           "attributes" : [
+                {"type" : "input", "text": "input"},  
+                {"type" : "output", "text": "output"}
+           ]
+        },
+        {
            "title" : "microphone",
            "node_library" : "lib/libpaSource_node.so",
            "control_library" : "",

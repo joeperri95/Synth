@@ -11,18 +11,21 @@ namespace ui { namespace nodes {
 NodeEditorWidget::NodeEditorWidget(std::shared_ptr<PipelineController> controller) {
     this->controller = controller;
     this->loadRecord("etc/recipes.json");
-#define TESTING 
+#define TESTING
 #ifdef TESTING
     // Create a default pipeline
     controller->addNode("wav");
     controller->addNode("passthrough");
     controller->addNode("vibrato");
     controller->addNode("volume");
+    controller->addNode("biquad");
     controller->addNode("sink");
     controller->addLink(1, 2);
     controller->addLink(3, 4);
     controller->addLink(5, 6);
     controller->addLink(7, 8);
+    controller->addLink(9, 10);
+
 #endif
 }
 
@@ -55,7 +58,7 @@ void NodeEditorWidget::render() {
 
     // context menu items
     if (ImGui::BeginPopup("add node"))
-    { 
+    {
         for (const auto &item : this->contextItems) {
             if (ImGui::MenuItem(item.c_str())) {
                 controller->addNode(item);
@@ -66,13 +69,13 @@ void NodeEditorWidget::render() {
     ImGui::PopStyleVar();
 
     // render links
-    
+
     std::map<LinkID, std::pair<int, int>> links = controller->getLinks();
     for (const auto &[linkid, pair]: links)
     {
         ImNodes::Link(linkid, pair.first, pair.second);
     }
-    
+
     ImNodes::MiniMap();
     ImNodes::EndNodeEditor();
 
@@ -100,7 +103,7 @@ void NodeEditorWidget::render() {
 
         controller->selectNodes(selected_nodes);
     }
-    else 
+    else
     {
         std::vector<int> selected_nodes;
         controller->selectNodes(selected_nodes);
@@ -113,9 +116,9 @@ void NodeEditorWidget::render() {
 void NodeEditorWidget::loadRecord(std::string filename) {
     std::ifstream ifs(filename);
 
-    json j = json::parse(ifs);    
-    json recipe_list = j["recipes"];    
-    
+    json j = json::parse(ifs);
+    json recipe_list = j["recipes"];
+
     for (const auto &i: recipe_list) {
         std::string title(i["title"]);
         this->contextItems.push_back((title));
