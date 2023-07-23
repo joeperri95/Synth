@@ -1,5 +1,6 @@
 #pragma once
 #include "ControlWidget.h"
+#include "common/DisplayContext.h"
 #include <map>
 #include <functional>
 
@@ -7,13 +8,13 @@ namespace ui {
 
 class SineControlWidget : public ControlWidget {
 public:
-    SineControlWidget(int id);
+    SineControlWidget(int id, DisplayContext ctx);
     ~SineControlWidget();
     void render() override;
 
-    void notify();
-    int addSubscriber(int nodeid, AudioParameterCallback func, void * arg);
-    void removeSubscriber(int id); 
+    void notify() override;
+    int addSubscriber(int nodeid, AudioParameterCallback func, void * arg) override;
+    void removeSubscriber(int id) override;
 
 protected:
     float frequency;
@@ -27,7 +28,7 @@ private:
 };
 
 extern "C" {
-   void build_control(int id, ControlWidget ** control);
+   void build_control(int id, DisplayContext ctx, ControlWidget ** control);
 }
 
 }

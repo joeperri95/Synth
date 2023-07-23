@@ -8,8 +8,8 @@ GUI::GUI() {
     height = 800;
     width = 600;
     shouldQuit = false;
-    this->controller = std::make_shared<PipelineController>();
-    this->nodes = std::make_unique<nodes::NodeEditorWidget>(this->controller);
+    this->controller = nullptr;
+    this->nodes = nullptr;
 }
 
 GUI::~GUI() {
@@ -28,10 +28,10 @@ void GUI::shut_down() {
 }
 void GUI::initialize() {
     SDL_Init(SDL_INIT_VIDEO);
-    window = std::unique_ptr<SDL_Window, sdl_deleter>(SDL_CreateWindow(this->title.c_str(), 
-                                                                            SDL_WINDOWPOS_CENTERED, 
+    window = std::unique_ptr<SDL_Window, sdl_deleter>(SDL_CreateWindow(this->title.c_str(),
                                                                             SDL_WINDOWPOS_CENTERED,
-                                                                            this->height, this->width, 
+                                                                            SDL_WINDOWPOS_CENTERED,
+                                                                            this->height, this->width,
                                                                             SDL_WINDOW_SHOWN |
                                                                             SDL_WINDOW_RESIZABLE
                                                                             ));
@@ -39,13 +39,19 @@ void GUI::initialize() {
     renderer = std::unique_ptr<SDL_Renderer, sdl_deleter>(SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED));
     IMGUI_CHECKVERSION();
 
-    ImGui::CreateContext();
-    ImPlot::CreateContext();
-    ImNodes::CreateContext();
+    this->context = {
+        .imgui_context = ImGui::CreateContext(),
+        .imnodes_context = ImNodes::CreateContext(),
+        .implot_context = ImPlot::CreateContext()
+    };
+
     ImGui::StyleColorsDark();
 
     ImGui_ImplSDL2_InitForSDLRenderer(window.get(), renderer.get());
     ImGui_ImplSDLRenderer_Init(renderer.get());
+
+    this->controller = std::make_shared<PipelineController>(context);
+    this->nodes = std::make_unique<nodes::NodeEditorWidget>(this->controller);
 }
 
 void GUI::handle_event() {
@@ -54,7 +60,7 @@ void GUI::handle_event() {
         if (event.type == SDL_QUIT) {
             shouldQuit = true;
         } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window.get())) {
-            shouldQuit = true; 
+            shouldQuit = true;
         } else if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
                 case SDLK_DELETE:
@@ -63,12 +69,12 @@ void GUI::handle_event() {
                 default:
                 break;
             }
-        } 
+        }
     }
 }
 
 void GUI::render() {
-  
+
     ImGui_ImplSDLRenderer_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -80,7 +86,7 @@ void GUI::render() {
         static float f = 0.0f;
         bool b = false;
 
-        ImGui::Begin("Control Panel"); 
+        ImGui::Begin("Control Panel");
 
         ImGui::SliderFloat("volume", &f, 0.0f, 1.0f);
         controller->volume = f;
@@ -88,11 +94,11 @@ void GUI::render() {
         b = controller->flanger;
         ImGui::Checkbox("flanger", &b);
         controller->flanger = b;
-        
+
         b = controller->reverb;
         ImGui::Checkbox("reverb", &b);
         controller->reverb = b;
-        
+
         b = controller->average;
         ImGui::Checkbox("average", &b);
         controller->average = b;
@@ -116,7 +122,7 @@ void GUI::render() {
         float f = 0.0f;
         int depth = 200;
 
-        ImGui::Begin("Flanger"); 
+        ImGui::Begin("Flanger");
 
         f = controller->flanger_freq;
         ImGui::SliderFloat("frequency", &f, 0.0f, 5.0f);
@@ -129,7 +135,7 @@ void GUI::render() {
         depth = controller->flanger_depth;
         ImGui::SliderInt("depth", &depth, 100, 1000);
         controller->flanger_depth = depth;
-        
+
         ImGui::End();
     }
 
@@ -137,7 +143,7 @@ void GUI::render() {
         float f = 0.0f;
         int depth = 20;
 
-        ImGui::Begin("Vibrato"); 
+        ImGui::Begin("Vibrato");
 
         f = controller->vibrato_freq;
         ImGui::SliderFloat("frequency", &f, 0.0f, 20.0f);
@@ -146,15 +152,15 @@ void GUI::render() {
         depth = controller->vibrato_depth;
         ImGui::SliderInt("depth", &depth, 1, 200);
         controller->vibrato_depth = depth;
-        
+
         ImGui::End();
     }
-    
+
     if (controller->tremolo) {
         float f = 0.0f;
         int depth = 200;
 
-        ImGui::Begin("Tremolo"); 
+        ImGui::Begin("Tremolo");
 
         f = controller->tremolo_freq;
         ImGui::SliderFloat("frequency", &f, 0.0f, 5.0f);
@@ -163,15 +169,15 @@ void GUI::render() {
         depth = controller->tremolo_depth;
         ImGui::SliderInt("depth", &depth, 100, 1000);
         controller->tremolo_depth = depth;
-        
+
         ImGui::End();
     }
-    
+
     if (controller->reverb) {
         int depth = 5;
         float f = 0.0f;
 
-        ImGui::Begin("Reverb"); 
+        ImGui::Begin("Reverb");
 
         f = controller->reverb_decay;
         ImGui::SliderFloat("decay", &f, 0.0f, 1.0f);
@@ -180,19 +186,19 @@ void GUI::render() {
         depth = controller->reverb_depth;
         ImGui::SliderInt("depth", &depth, 1, 51);
         controller->reverb_depth = depth;
-        
+
         ImGui::End();
     }
-    
+
     if (controller->average) {
         int depth = 5;
 
-        ImGui::Begin("Average"); 
+        ImGui::Begin("Average");
 
         depth = controller->average_taps;
         ImGui::SliderInt("taps", &depth, 1, 51);
         controller->average_taps = depth;
-        
+
         ImGui::End();
     }
 
@@ -223,7 +229,7 @@ void GUI::render() {
             ImPlot::EndPlot();
         }
         ImGui::End();
-    }  
+    }
 */
     nodes->render();
 

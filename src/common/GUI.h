@@ -14,6 +14,7 @@
 #include "effectController.h"
 #include "AudioQueue.h"
 #include "PipelineController.h"
+#include "DisplayContext.h"
 #include "ui/control/ControlWidget.h"
 #include "ui/nodes/NodeEditorWidget.h"
 
@@ -40,18 +41,19 @@ public:
     bool shouldQuit;
 private:
     // common
-    std::unique_ptr<SDL_Renderer, sdl_deleter> renderer; 
-    std::unique_ptr<SDL_Window, sdl_deleter> window; 
+    std::unique_ptr<SDL_Renderer, sdl_deleter> renderer;
+    std::unique_ptr<SDL_Window, sdl_deleter> window;
     SDL_Event event;
     std::string title;
     int height;
     int width;
 
     std::unique_ptr<nodes::NodeEditorWidget> nodes;
+    DisplayContext context;
 
     // new
     std::vector<std::unique_ptr<ControlWidget>> widgets;
     std::shared_ptr<PipelineController> controller;
 };
-    
+
 }

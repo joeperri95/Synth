@@ -6,8 +6,8 @@ using pipeline::Node;
 using ui::nodes::NodeWidget;
 using ui::ControlWidget;
 
-PipelineController::PipelineController() :  mutex(), pipeline(), links(), nodes(), selectedNodes(), 
-                                            nextLinkID(1), nextNodeID(1), controlFactory(), 
+PipelineController::PipelineController(DisplayContext context) :  mutex(), pipeline(), context(context), links(), nodes(), selectedNodes(),
+                                            nextLinkID(1), nextNodeID(1), controlFactory(context),
                                             nodeWidgetFactory(), nodeFactory() {}
 
 PipelineController::~PipelineController() {}
@@ -73,7 +73,7 @@ LinkID PipelineController::addLink(int start, int end) {
     this->links[ret] = std::make_pair(start, end);
     this->pipeline.linkNodes(ret, start, end);
 
-    return ret; 
+    return ret;
 }
 
 void PipelineController::removeLink(LinkID link) {

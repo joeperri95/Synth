@@ -9,6 +9,7 @@
 #include <mutex>
 #include <set>
 #include <string>
+#include "DisplayContext.h"
 
 #include "ui/nodes/NodeWidget.h"
 #include "ui/nodes/NodeWidgetFactory.h"
@@ -22,7 +23,7 @@ using pipeline::NodeID;
 
 class PipelineController {
 public:
-  PipelineController();
+  PipelineController(DisplayContext context);
   ~PipelineController();
 
   NodeID addNode(std::string recipe);
@@ -47,6 +48,8 @@ private:
   // Pipeline section
   pipeline::Pipeline pipeline;
   std::map<NodeID, std::shared_ptr<pipeline::Node>> nodeList;
+
+  DisplayContext context;
 
   // ImNode section
   std::map<LinkID, std::pair<AttrID, AttrID>> links;
