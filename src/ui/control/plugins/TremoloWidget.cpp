@@ -5,12 +5,13 @@ namespace ui {
 
 int TremoloWidget::count;
 
-TremoloWidget::TremoloWidget(int id, float amplitude, float frequency) {
-    this->amplitude = amplitude;
-    this->frequency = frequency;
+TremoloWidget::TremoloWidget(int id, DisplayContext context) {
+    this->amplitude = 0.5;
+    this->frequency = 5.0;
     this->_name = "Tremolo-" + std::to_string(++TremoloWidget::count);
     this->_id = id;
     this->nextSubscriberID = 1;
+    ImGui::SetCurrentContext(context.imgui_context);
 }
 
 TremoloWidget::~TremoloWidget() {
@@ -26,10 +27,10 @@ void TremoloWidget::render() {
 
     ImGui::SliderFloat("amplitude", &amp_end, 0.0f, 1.0f);
     this->amplitude = amp_end;
-    
+
     ImGui::SliderFloat("frequency", &freq_end, 0.0f, 10.0f);
     this->frequency = freq_end;
-    
+
     if (amp_start != amp_end) {
         spdlog::info("Tremolo amplitude changed to: {}", amp_end);
         this->notify();
@@ -61,9 +62,9 @@ void TremoloWidget::notify() {
 int TremoloWidget::addSubscriber(int nodeid, AudioParameterCallback func, void * arg) {
     spdlog::debug("TremoloWidget::addSubscriber");
     int ret = nextSubscriberID++;
-    this->subscribers[ret] = func; 
-    this->args[ret] = arg; 
-    this->nodeArgs[ret] = nodeid; 
+    this->subscribers[ret] = func;
+    this->args[ret] = arg;
+    this->nodeArgs[ret] = nodeid;
     return ret;
 }
 
@@ -74,4 +75,11 @@ void TremoloWidget::removeSubscriber(int id) {
         this->subscribers.erase(it);
     }
 }
+
+extern "C" {
+    void build_control(int id, DisplayContext context, ControlWidget ** control) {
+        *control = new TremoloWidget(id, context);
+    }
+}
+
 }

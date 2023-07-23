@@ -5,12 +5,13 @@ namespace ui {
 
 int VibratoWidget::count;
 
-VibratoWidget::VibratoWidget(int id, int depth, float frequency) {
-    this->depth = depth;
-    this->frequency = frequency;
+VibratoWidget::VibratoWidget(int id, DisplayContext context) {
+    this->depth = 20;
+    this->frequency = 5.0;
     this->_name = "vibrato-" + std::to_string(++VibratoWidget::count);
     this->_id = id;
     this->nextSubscriberID = 1;
+    ImGui::SetCurrentContext(context.imgui_context);
 }
 
 VibratoWidget::~VibratoWidget() {
@@ -26,10 +27,10 @@ void VibratoWidget::render() {
 
     ImGui::SliderInt("depth", &amp_end, 1, 100);
     this->depth = amp_end;
-    
+
     ImGui::SliderFloat("frequency", &freq_end, 0.0f, 20.0f);
     this->frequency = freq_end;
-    
+
     if (amp_start != amp_end) {
         spdlog::info("Vibrato depth changed to: {}", amp_end);
         this->notify();
@@ -61,9 +62,9 @@ void VibratoWidget::notify() {
 int VibratoWidget::addSubscriber(int nodeid, AudioParameterCallback func, void * arg) {
     spdlog::debug("VibratoWidget::addSubscriber");
     int ret = nextSubscriberID++;
-    this->subscribers[ret] = func; 
-    this->args[ret] = arg; 
-    this->nodeArgs[ret] = nodeid; 
+    this->subscribers[ret] = func;
+    this->args[ret] = arg;
+    this->nodeArgs[ret] = nodeid;
     return ret;
 }
 
@@ -74,4 +75,11 @@ void VibratoWidget::removeSubscriber(int id) {
         this->subscribers.erase(it);
     }
 }
+
+extern "C" {
+    void build_control(int id, DisplayContext context, ControlWidget ** control) {
+        *control = new VibratoWidget(id, context);
+    }
+}
+
 }

@@ -8,16 +8,15 @@ BiquadNode::BiquadNode(NodeID id, AttrID inputID, AttrID outputID){
     this->numOutputs = 1;
     this->inputID = inputID;
     this->outputID = outputID;
-
-    this->cutoff = 440.0f;
-    this->type = FilterType::lowpass;
-    this->updateParameters(cutoff, static_cast<uint32_t>(type));
-
     this->inputs[inputID] = nullptr;
     this->outputs[outputID] = nullptr;
     done = false;
 
     this->format = audio::AudioFormat(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
+
+    this->cutoff = 10000.0f;
+    this->type = FilterType::lowpass;
+    this->updateParameters(this->cutoff, static_cast<uint32_t>(type));
 
     this->input = std::make_shared<audio::AudioQueue<sample_type>>();
     this->input->setFormat(format);
@@ -95,7 +94,7 @@ void BiquadNode::updateParameters(float cutoff, uint32_t filter_type) {
 
     switch(this->type) {
         case FilterType::lowpass:
-            spdlog::info("BiquadNode: Changed to lowpass filter");
+            spdlog::debug("BiquadNode: Changed to lowpass filter");
             this->b0 = (1.0 - cos_w0) / (2.0 * a0);
             this->b1 = (1.0 - cos_w0) / (a0);
             this->b2 = (1.0 - cos_w0) / (2.0 * a0);
@@ -103,7 +102,7 @@ void BiquadNode::updateParameters(float cutoff, uint32_t filter_type) {
             this->a2 = (1.0 - alpha) / (a0);
             break;
         case FilterType::highpass:
-            spdlog::info("BiquadNode: Changed to highpass filter");
+            spdlog::debug("BiquadNode: Changed to highpass filter");
             this->b0 = (1.0 + cos_w0) / (2.0 * a0);
             this->b1 = -1.0 * (1 + cos_w0) / (a0);
             this->b2 = (1.0 + cos_w0) / (2.0 * a0);
@@ -111,7 +110,7 @@ void BiquadNode::updateParameters(float cutoff, uint32_t filter_type) {
             this->a2 = (1 - alpha) / (a0);
             break;
         case FilterType::bandpass:
-            spdlog::info("BiquadNode: Changed to bandpass filter");
+            spdlog::debug("BiquadNode: Changed to bandpass filter");
             this->b0 = (sin_w0) / (2 * a0);
             this->b1 = 0.0;
             this->b2 = -1.0 * (sin_w0) / (2 * a0);

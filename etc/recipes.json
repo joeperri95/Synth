@@ -3,7 +3,7 @@
         {
            "title" : "volume",
            "node_library" : "lib/libvolume_node.so",
-           "control_library" : "",
+           "control_library" : "lib/libvolume_control.so",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}
@@ -21,7 +21,7 @@
         {
            "title" : "biquad",
            "node_library" : "lib/libbiquad_node.so",
-           "control_library" : "",
+           "control_library" : "lib/libbiquad_control.so",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}
@@ -91,7 +91,7 @@
         {
            "title" : "vibrato",
            "node_library" : "lib/libvibrato_node.so",
-           "control_library" : "",
+           "control_library" : "lib/libvibrato_control.so",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}
@@ -100,7 +100,7 @@
         {
            "title" : "tremolo",
            "node_library" : "lib/libtremolo_node.so",
-           "control_library" : "",
+           "control_library" : "lib/libtremolo_control.so",
            "attributes" : [
                 {"type" : "input", "text": "input"},  
                 {"type" : "output", "text": "output"}

@@ -3,6 +3,7 @@
 #include "ControlWidget.h"
 #include <map>
 #include <functional>
+#include "common/DisplayContext.h"
 
 namespace ui {
 
@@ -14,7 +15,7 @@ public:
         bandpass
     };
 
-    BiquadWidget(int id, float cutoff, FilterType type);
+    BiquadWidget(int id, DisplayContext context);
     ~BiquadWidget();
     void render() override;
 
@@ -32,5 +33,9 @@ protected:
 private:
     static int count;
 };
+
+extern "C" {
+   void build_control(int id, DisplayContext ctx, ControlWidget ** control);
+}
 
 }

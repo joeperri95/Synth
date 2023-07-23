@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ControlWidget.h"
+#include "common/DisplayContext.h"
 #include <map>
 #include <functional>
 
@@ -8,13 +9,13 @@ namespace ui {
 
 class VolumeWidget : public ControlWidget {
 public:
-    VolumeWidget(int id, float volume);
+    VolumeWidget(int id, DisplayContext context);
     ~VolumeWidget();
     void render() override;
 
     void notify();
     int addSubscriber(int nodeid, AudioParameterCallback func, void * arg);
-    void removeSubscriber(int id); 
+    void removeSubscriber(int id);
 
 protected:
     float volume;
@@ -25,5 +26,9 @@ protected:
 private:
     static int count;
 };
+
+extern "C" {
+   void build_control(int id, DisplayContext ctx, ControlWidget ** control);
+}
 
 }

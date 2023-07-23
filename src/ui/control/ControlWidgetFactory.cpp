@@ -1,8 +1,4 @@
 #include "ControlWidgetFactory.h"
-#include "VolumeWidget.h"
-#include "TremoloWidget.h"
-#include "VibratoWidget.h"
-#include "BiquadWidget.h"
 #include "ui/control/ControlWidget.h"
 #include <memory>
 #include <dlfcn.h>
@@ -21,21 +17,14 @@ ControlWidgetFactory::ControlWidgetFactory(DisplayContext context) {
 ControlWidgetFactory::~ControlWidgetFactory() {}
 
 std::shared_ptr<ControlWidget> ControlWidgetFactory::create(int id, std::string s) {
-    if (s.compare("volume") == 0) {
-        std::shared_ptr<ControlWidget> ret = std::make_unique<VolumeWidget>(id, 0.5);
-        return ret;
-    } else if (s.compare("sine") == 0) {
-        std::shared_ptr<ControlWidget> ret = load(id, s);
-        return ret;
-    } else if (s.compare("tremolo") == 0) {
-        std::shared_ptr<ControlWidget> ret = std::make_unique<TremoloWidget>(id, 0.5, 5.0);
-        return ret;
-    } else if (s.compare("vibrato") == 0) {
-        std::shared_ptr<ControlWidget> ret = std::make_unique<VibratoWidget>(id, 20, 5.0);
-        return ret;
-    } else if (s.compare("biquad") == 0) {
-        std::shared_ptr<ControlWidget> ret = std::make_unique<BiquadWidget>(id, 440.0, BiquadWidget::FilterType::lowpass);
-        return ret;
+    if(recipes.contains(s)) {
+        if(recipes[s].size() > 0){
+            std::shared_ptr<ControlWidget> ret = load(id, s);
+            return ret;
+        } else {
+            spdlog::debug("Recipe {} has no control library", s);
+            return nullptr;
+        }
     } else {
         spdlog::warn("Control recipe not found {}", s);
         return nullptr;

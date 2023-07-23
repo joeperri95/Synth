@@ -3,18 +3,19 @@
 #include "ControlWidget.h"
 #include <map>
 #include <functional>
+#include "common/DisplayContext.h"
 
 namespace ui {
 
 class VibratoWidget : public ControlWidget {
 public:
-    VibratoWidget(int id, int depth, float frequency);
+    VibratoWidget(int id, DisplayContext context);
     ~VibratoWidget();
     void render() override;
 
     void notify();
     int addSubscriber(int nodeid, AudioParameterCallback func, void * arg);
-    void removeSubscriber(int id); 
+    void removeSubscriber(int id);
 
 protected:
     int depth;
@@ -26,5 +27,10 @@ protected:
 private:
     static int count;
 };
+
+extern "C" {
+   void build_control(int id, DisplayContext ctx, ControlWidget ** control);
+}
+
 
 }

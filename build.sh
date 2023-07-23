@@ -22,3 +22,4 @@ if [ $# -gt 0 ]; then
 fi
 
 cmake --build ./build
+cp etc/* ./build/etc

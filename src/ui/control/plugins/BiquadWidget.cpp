@@ -6,12 +6,13 @@ namespace ui {
 
 int BiquadWidget::count;
 
-BiquadWidget::BiquadWidget(int id, float cutoff, FilterType type) {
-    this->cutoff = cutoff;
-    this->type = type;
+BiquadWidget::BiquadWidget(int id, DisplayContext context) {
+    this->cutoff = 10000.0;
+    this->type = FilterType::lowpass;
     this->_name = "Biquad-" + std::to_string(++BiquadWidget::count);
     this->_id = id;
     this->nextSubscriberID = 1;
+    ImGui::SetCurrentContext(context.imgui_context);
 }
 
 BiquadWidget::~BiquadWidget() {
@@ -74,6 +75,12 @@ void BiquadWidget::removeSubscriber(int id) {
     auto it = this->subscribers.find(id);
     if (it != this->subscribers.end()) {
         this->subscribers.erase(it);
+    }
+}
+
+extern "C" {
+    void build_control(int id, DisplayContext context, ControlWidget ** control) {
+        *control = new BiquadWidget(id, context);
     }
 }
 }

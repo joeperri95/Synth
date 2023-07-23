@@ -45,16 +45,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_library(sineSource_control SHARED SineControlWidget.cpp ${Sources} ${Headers})
 target_link_libraries(sineSource_control ${ControlLinkLibraries})
 
-if(FALSE)
-add_library(fileSource_node SHARED FileSourceNode.cpp ../Node.cpp ${Headers})
-target_link_libraries(fileSource_node ${ControlLinkLibraries})
+add_library(volume_control SHARED VolumeWidget.cpp ${Sources} ${Headers})
+target_link_libraries(volume_control ${ControlLinkLibraries})
 
 add_library(tremolo_control SHARED TremoloWidget.cpp ${Sources} ${Headers})
 target_link_libraries(tremolo_control ${ControlLinkLibraries})
 
-add_library(volume_control SHARED VolumeWidget.cpp ${Sources} ${Headers})
-target_link_libraries(volume_control ${ControlLinkLibraries})
-
 add_library(vibrato_control SHARED VibratoWidget.cpp ${Sources} ${Headers})
 target_link_libraries(vibrato_control ${ControlLinkLibraries})
+
+add_library(biquad_control SHARED BiquadWidget.cpp ${Sources} ${Headers})
+target_link_libraries(biquad_control ${ControlLinkLibraries})
+if(FALSE)
+
+add_library(fileSource_node SHARED FileSourceNode.cpp ../Node.cpp ${Headers})
+target_link_libraries(fileSource_node ${ControlLinkLibraries})
+
 endif()

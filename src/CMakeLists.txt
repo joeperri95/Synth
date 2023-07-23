@@ -20,10 +20,6 @@ set(Sources
     ui/nodes/NodeWidgetFactory.cpp
     ui/nodes/NodeWidget.cpp
     ui/control/ControlWidgetFactory.cpp
-    ui/control/VolumeWidget.cpp
-    ui/control/VibratoWidget.cpp
-    ui/control/TremoloWidget.cpp
-    ui/control/BiquadWidget.cpp
     pipeline/Pipeline.cpp
     pipeline/NodeFactory.cpp
     pipeline/Node.cpp

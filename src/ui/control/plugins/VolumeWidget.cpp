@@ -5,11 +5,12 @@ namespace ui {
 
 int VolumeWidget::count;
 
-VolumeWidget::VolumeWidget(int id, float volume) {
-    this->volume = volume;
+VolumeWidget::VolumeWidget(int id, DisplayContext context) {
+    this->volume = 0.5;
     this->_name = "volume-" + std::to_string(++VolumeWidget::count);
     this->_id = id;
     this->nextSubscriberID = 1;
+    ImGui::SetCurrentContext(context.imgui_context);
 }
 
 VolumeWidget::~VolumeWidget() {
@@ -22,7 +23,7 @@ void VolumeWidget::render() {
     float end = this->volume;
     ImGui::SliderFloat("volume", &end, 0.0f, 1.0f);
     this->volume = end;
-    
+
     if (start != end) {
         spdlog::info("Volume changed to: {}", end);
         this->notify();
@@ -45,9 +46,9 @@ void VolumeWidget::notify() {
 int VolumeWidget::addSubscriber(int nodeid, AudioParameterCallback func, void * arg) {
     spdlog::debug("VolumeWidget::addSubscriber");
     int ret = nextSubscriberID++;
-    this->subscribers[ret] = func; 
-    this->args[ret] = arg; 
-    this->nodeArgs[ret] = nodeid; 
+    this->subscribers[ret] = func;
+    this->args[ret] = arg;
+    this->nodeArgs[ret] = nodeid;
     return ret;
 }
 
@@ -56,6 +57,12 @@ void VolumeWidget::removeSubscriber(int id) {
     auto it = this->subscribers.find(id);
     if (it != this->subscribers.end()) {
         this->subscribers.erase(it);
+    }
+}
+
+extern "C" {
+    void build_control(int id, DisplayContext context, ControlWidget ** control) {
+        *control = new VolumeWidget(id, context);
     }
 }
 }
