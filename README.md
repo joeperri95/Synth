@@ -21,12 +21,3 @@ This is the bridge between the graphical nodewidgets and the actual audio pipeli
 Each pipeline element inherits from the Node class.
 Elements are added to a pipeline object
 
-
-
-Future design
-
-Plugin based
-pipeline will load a .so file containing an audio node X
-gui will construct the visual node based on a config file X
-gui will optionally load a control panel ui element contained in a .so file
-Tooling to generate this subproject
