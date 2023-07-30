@@ -74,7 +74,7 @@
         {
            "title" : "wav",
            "node_library" : "lib/libfileSource_node.so",
-           "control_library" : "",
+           "control_library" : "lib/libfileSource_control.so",
            "attributes" : [
                 {"type" : "output", "text": "output"}
            ]

@@ -23,3 +23,4 @@ fi
 
 cmake --build ./build
 cp etc/* ./build/etc
+cp assets/wav/* ./build

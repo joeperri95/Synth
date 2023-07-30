@@ -2,7 +2,9 @@
 
 #include <map>
 #include <string>
-#include <cstdint>
+#include <variant>
+
+typedef std::variant<bool, uint8_t, uint16_t, uint32_t, uint64_t, int8_t, int16_t, int32_t, int64_t, float, double, std::string> AudioParam;
 
 typedef enum {
     TYPE_NOTHING,
@@ -16,7 +18,8 @@ typedef enum {
     TYPE_INT8,
     TYPE_INT16,
     TYPE_INT32,
-    TYPE_INT64
+    TYPE_INT64,
+    TYPE_STR
 } AudioParameterType;
 
 class AudioParameter {
@@ -25,6 +28,7 @@ public:
     AudioParameter(const AudioParameter &other);
     ~AudioParameter();
 
+    AudioParameter& operator=(const AudioParameter &other);
     AudioParameterType getType();
 
     void    setParamNothing();
@@ -50,21 +54,11 @@ public:
     void  setParamI32(int32_t data);
     int64_t  getParamI64();
     void  setParamI64(int64_t data);
-    
-private:    
-    AudioParameterType type;
-    union {
-        float    float_;
-        double   double_;
-        bool     boolean_;
-        uint8_t  uint8_;
-        uint16_t uint16_;
-        uint32_t uint32_;
-        uint64_t uint64_;
-        int8_t   int8_;
-        int16_t  int16_;
-        int32_t  int32_;
-        int64_t  int64_;
-    } data;
+    std::string  getParamString();
+    void  setParamString(std::string data);
 
+private:
+    AudioParameterType type;
+    AudioParam data;
 };
+

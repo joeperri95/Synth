@@ -13,6 +13,7 @@ set(Sources
     ../external/imnodes/imnodes.h
     ../external/imnodes/imnodes.cpp
     ../external/imnodes/imnodes_internal.h
+    ../external/imgui-filebrowser/imfilebrowser.h
 )
 
 set(Headers
@@ -56,9 +57,6 @@ target_link_libraries(vibrato_control ${ControlLinkLibraries})
 
 add_library(biquad_control SHARED BiquadWidget.cpp ${Sources} ${Headers})
 target_link_libraries(biquad_control ${ControlLinkLibraries})
-if(FALSE)
 
-add_library(fileSource_node SHARED FileSourceNode.cpp ../Node.cpp ${Headers})
-target_link_libraries(fileSource_node ${ControlLinkLibraries})
-
-endif()
+add_library(fileSource_control SHARED FileSourceWidget.cpp ${Sources} ${Headers})
+    target_link_libraries(fileSource_control ${ControlLinkLibraries})

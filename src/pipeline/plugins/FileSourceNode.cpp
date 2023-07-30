@@ -10,17 +10,17 @@ FileSourceNode::FileSourceNode(NodeID id, AttrID outputID){
     this->outputs[outputID] = nullptr;
     done = false;
 
-    this->filename = std::string("./sample.wav");
+    this->filename = std::string("");
     this->format = audio::AudioFormat(CHANNELS, SAMPLE_RATE, BIT_DEPTH, BUFF_SIZE);
 
     this->output = std::make_shared<audio::AudioQueue<sample_type>>();
     this->output->setFormat(format);
     this->output->setQueue(this->outputs[outputID]);
-    
-    this->index = 0;
-    this->readWavData();
 
-    this->updateThread = std::thread(FileSourceNode::update, this); 
+    this->index = 0;
+    this->updating = true;
+
+    this->updateThread = std::thread(FileSourceNode::update, this);
 }
 
 FileSourceNode::~FileSourceNode(){
@@ -35,27 +35,51 @@ void FileSourceNode::update(FileSourceNode *self) {
         auto now = std::chrono::high_resolution_clock::now();
         auto sleep = now + std::chrono::microseconds(period_us);
 
-        for(int i = 0; i < self->format.bufferSize; i++) {
-            for(int j = 0; j < self->format.channels; j++) {
-                if (!self->output->full()) {
-                    self->output->push(self->data[self->index++]);
-                    if(self->index > self->data.size()) {
-                        self->index = 0;
+        if (self->output->isQueueValid() && !self->updating) {
+            for(int i = 0; i < self->format.bufferSize; i++) {
+                for(int j = 0; j < self->format.channels; j++) {
+                    if (!self->output->full()) {
+                        self->output->push(self->data[self->index++]);
+                        if(self->index > self->data.size()) {
+                            self->index = 0;
+                        }
+                    }
+                }
+            }
+        } else {
+            for(int i = 0; i < self->format.bufferSize; i++) {
+                for(int j = 0; j < self->format.channels; j++) {
+                    if (!self->output->full()) {
+                        self->output->push(0);
                     }
                 }
             }
         }
+
         std::this_thread::sleep_until(sleep);
     }
-} 
- 
+}
+
 void FileSourceNode::onInputChanged(AttrID attr) {
     if(this->outputs.find(attr) != this->outputs.end()) {
         this->output->setQueue(this->outputs[attr]);
     }
 }
 
-void FileSourceNode::onStateChanged(std::map<std::string, AudioParameter> /*newState*/, void */*arg*/) {
+void FileSourceNode::onStateChanged(std::map<std::string, AudioParameter> newState, void */*arg*/) {
+    auto it = newState.find("filename");
+    if(it != newState.end()) {
+        AudioParameter param = newState["filename"];
+        if(param.getType() != AudioParameterType::TYPE_STR) {
+            spdlog::warn("FileSourceNode::onStateChange did not receive a string parameter");
+        } else {
+            spdlog::info("FileSourceNode::onStateChange changing file to {}", param.getParamString());
+            this->filename = param.getParamString();
+            readWavData();
+        }
+    } else {
+        spdlog::warn("FileSourceNode::onStateChange did not find volume parameter");
+    }
 }
 
 void FileSourceNode::readWavData() {
@@ -70,13 +94,12 @@ void FileSourceNode::readWavData() {
         return;
     }
 
-    char _tmpBuffer[5];
     fs.ignore(4); // RIFF
     fs.ignore(4); // file size
-    fs.ignore(4); // WAVE 
-    fs.ignore(4); // fmt 
-    fs.ignore(4); // fmt_length 
-    fs.ignore(2); // fmt type 
+    fs.ignore(4); // WAVE
+    fs.ignore(4); // fmt
+    fs.ignore(4); // fmt_length
+    fs.ignore(2); // fmt type
     fs.ignore(2); // channels
     fs.ignore(4); // sample_rate
     fs.ignore(4); // byte rate
@@ -98,7 +121,9 @@ void FileSourceNode::readWavData() {
     }
 
     int length = *(int *)_fileSize + 1;
-    this->data.resize(length); 
+
+    updating = true;
+    this->data.resize(length);
 
     char temp[2];
 
@@ -111,9 +136,10 @@ void FileSourceNode::readWavData() {
         this->data[i] = *(short *)temp;
     }
 
-    spdlog::info("Done reading wav file"); 
-    fs.close();
+    updating = false;
 
+    spdlog::info("Done reading wav file");
+    fs.close();
 }
 
 
@@ -121,7 +147,7 @@ extern "C" {
     int build_node(int id, int nextAttrId, Node ** node) {
         *node = new FileSourceNode(id, nextAttrId);
         return nextAttrId + 1;
-    }   
+    }
 }
 
 } // pipeline

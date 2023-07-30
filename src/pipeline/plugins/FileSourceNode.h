@@ -18,20 +18,24 @@ public:
     void onInputChanged(AttrID attr);
     void onStateChanged(std::map<std::string, AudioParameter> newState, void *args);
     static void update(FileSourceNode *self);
-     
+
 private:
-    audio::AudioFormat format; 
+    audio::AudioFormat format;
     std::string filename;
     std::shared_ptr<audio::AudioQueue<sample_type>> output;
     AttrID outputID;
 
     bool done;
+    std::atomic<bool> updating;
     std::thread updateThread;
     unsigned int index;
     std::vector<sample_type> data;
     void readWavData();
 
-   int build_node(int id, int nextAttrId, Node **node);
 };
+
+extern "C" {
+    int build_node(int id, int nextAttrId, Node **node);
+}
 
 }

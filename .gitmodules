@@ -7,3 +7,9 @@
 [submodule "plugin/BasicPlugin/external/imnodes"]
 	path = plugin/BasicPlugin/external/imnodes
 	url = https://github.com/Nelarius/imnodes.git
+[submodule "external/ImGui-Addons"]
+	path = external/ImGui-Addons
+	url = https://github.com/gallickgunner/ImGui-Addons
+[submodule "external/imgui-filebrowser"]
+	path = external/imgui-filebrowser
+	url = https://github.com/AirGuanZ/imgui-filebrowser
