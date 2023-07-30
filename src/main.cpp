@@ -15,7 +15,6 @@
 #include "common/AudioQueue.h"
 #include "common/GUI.h"
 #include "spdlog/spdlog.h"
-#include "wav.h"
 
 using audio::AudioFormat;
 

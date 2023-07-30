@@ -11,7 +11,6 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
 #include "sample_type.h"
-#include "effectController.h"
 #include "AudioQueue.h"
 #include "PipelineController.h"
 #include "DisplayContext.h"
@@ -51,7 +50,6 @@ private:
     std::unique_ptr<nodes::NodeEditorWidget> nodes;
     DisplayContext context;
 
-    // new
     std::vector<std::unique_ptr<ControlWidget>> widgets;
     std::shared_ptr<PipelineController> controller;
 };
