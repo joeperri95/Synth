@@ -21,7 +21,7 @@ void VolumeWidget::render() {
 
     float start = this->volume;
     float end = this->volume;
-    ImGui::SliderFloat("volume", &end, 0.0f, 1.0f);
+    ImGui::SliderFloat("volume", &end, 0.0f, 2.0f);
     this->volume = end;
 
     if (start != end) {
