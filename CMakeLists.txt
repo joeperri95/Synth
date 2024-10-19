@@ -3,10 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Synth CXX)
 set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
 
-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 # COMPILE OPTIONS
 add_compile_options(-Wall -pthread -lportaudio -lasound -lm -lpthread)
 

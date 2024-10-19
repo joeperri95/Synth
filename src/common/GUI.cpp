@@ -17,7 +17,7 @@ GUI::~GUI() {
 }
 
 void GUI::shut_down() {
-    ImGui_ImplSDLRenderer_Shutdown();
+    ImGui_ImplSDLRenderer2_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
     ImPlot::DestroyContext();
@@ -48,7 +48,7 @@ void GUI::initialize() {
     ImGui::StyleColorsDark();
 
     ImGui_ImplSDL2_InitForSDLRenderer(window.get(), renderer.get());
-    ImGui_ImplSDLRenderer_Init(renderer.get());
+    ImGui_ImplSDLRenderer2_Init(renderer.get());
 
     this->controller = std::make_shared<PipelineController>(context);
     this->nodes = std::make_unique<nodes::NodeEditorWidget>(this->controller);
@@ -75,7 +75,7 @@ void GUI::handle_event() {
 
 void GUI::render() {
 
-    ImGui_ImplSDLRenderer_NewFrame();
+    ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
@@ -91,7 +91,7 @@ void GUI::render() {
     ImGui::Render();
     SDL_SetRenderDrawColor(renderer.get(), (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
     SDL_RenderClear(renderer.get());
-    ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
     SDL_RenderPresent(renderer.get());
 }
 

@@ -9,10 +9,10 @@ find_package(nlohmann_json REQUIRED)
 set(Sources
     main.cpp
     common/GUI.cpp
-    ../bindings/imgui_impl_sdl.h
-    ../bindings/imgui_impl_sdl.cpp
-    ../bindings/imgui_impl_sdlrenderer.h
-    ../bindings/imgui_impl_sdlrenderer.cpp
+    ../external/bindings/imgui_impl_sdl2.h
+    ../external/bindings/imgui_impl_sdl2.cpp
+    ../external/bindings/imgui_impl_sdlrenderer2.h
+    ../external/bindings/imgui_impl_sdlrenderer2.cpp
     ../external/imnodes/imnodes.h
     ../external/imnodes/imnodes.cpp
     ../external/imnodes/imnodes_internal.h
@@ -43,7 +43,7 @@ add_subdirectory(pipeline/plugins)
 add_subdirectory(ui/control/plugins)
 
 include_directories(.)
-include_directories("../bindings")
+include_directories("../external/bindings")
 
 add_compile_options(-pthread)
 

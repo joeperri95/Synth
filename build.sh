@@ -7,20 +7,17 @@ function clean() {
     rm -rf build
     rm -rf bindings 
     mkdir build
-    pushd build
-    export CONAN_SYSREQUIRES_MODE=enabled
-    conan install .. --build=missing -s compiler.libcxx=libstdc++11 -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
-    # cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .. 
-    cmake .. 
-    popd
+    conan install . --output-folder=build --build=missing -c tools.system.package_manager:mode=install -s build_type=Debug
+    cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
 }
 
 if [ $# -gt 0 ]; then
-    if [ $1 == "clean" ]; then
-       clean
+    if [ $1 == "--clean" ]; then
+        echo "test"
+        clean
     fi
 fi
 
-cmake --build ./build
+cmake --build ./build -j 8
 cp etc/* ./build/etc
 cp assets/wav/* ./build
